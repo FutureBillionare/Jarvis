@@ -4,11 +4,6 @@ import pytest
 from claude_code_backend import StreamParser
 
 
-def _lines(*events):
-    """Serialize dicts to newline-separated JSON strings."""
-    return [json.dumps(e) + "\n" for e in events]
-
-
 def test_text_delta_fires_on_text():
     received = []
     parser = StreamParser(on_text=received.append)
@@ -148,3 +143,19 @@ def test_split_input_json_accumulated():
     }))
 
     assert starts == [("Edit", {"file_path": "/foo/bar", "old_string": "x", "new_string": "y"})]
+
+
+def test_unknown_tool_use_id_falls_back_to_id():
+    """When a tool result arrives with no prior tool_use registration, name falls back to the raw ID."""
+    results = []
+    parser = StreamParser(on_tool_result=lambda n, r: results.append((n, r)))
+
+    # No content_block_start — simulate truncated stream or out-of-order event
+    parser.feed(json.dumps({
+        "type": "user",
+        "message": {"role": "user", "content": [
+            {"type": "tool_result", "tool_use_id": "tu_unknown", "content": "some output"}
+        ]}
+    }))
+
+    assert results == [("tu_unknown", "some output")]

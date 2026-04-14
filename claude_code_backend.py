@@ -163,12 +163,12 @@ def chat_in_thread(
     message: str,
     history: list[dict] | None = None,
     last_session: str | None = None,
-    on_text: Callable[[str], None] = None,
-    on_done: Callable[[], None] = None,
-    on_error: Callable[[str], None] = None,
-    on_tool_start: Callable[[str, dict], None] = None,
-    on_tool_result: Callable[[str, str], None] = None,
-    on_status: Callable[[str], None] = None,
+    on_text: Callable[[str], None] | None = None,
+    on_done: Callable[[], None] | None = None,
+    on_error: Callable[[str], None] | None = None,
+    on_tool_start: Callable[[str, dict], None] | None = None,
+    on_tool_result: Callable[[str, str], None] | None = None,
+    on_status: Callable[[str], None] | None = None,
     **kwargs,
 ):
     """
@@ -199,6 +199,12 @@ def chat_in_thread(
             )
             if on_status:
                 on_status("CC ▶ session started")
+            # Drain stderr concurrently — avoids pipe deadlock when --verbose
+            # produces large output while stdout is still being read
+            _stderr_chunks: list[str] = []
+            def _drain_stderr():
+                _stderr_chunks.append(proc.stderr.read())
+            threading.Thread(target=_drain_stderr, daemon=True).start()
             parser = StreamParser(
                 on_text=on_text,
                 on_tool_start=on_tool_start,
@@ -207,7 +213,7 @@ def chat_in_thread(
             for raw_line in proc.stdout:
                 parser.feed(raw_line)
             proc.wait()
-            stderr_out = proc.stderr.read().strip()
+            stderr_out = "".join(_stderr_chunks).strip()
             if proc.returncode == 0:
                 if on_status:
                     on_status("CC ✓ done")

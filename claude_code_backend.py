@@ -204,7 +204,8 @@ def chat_in_thread(
             _stderr_chunks: list[str] = []
             def _drain_stderr():
                 _stderr_chunks.append(proc.stderr.read())
-            threading.Thread(target=_drain_stderr, daemon=True).start()
+            _stderr_thread = threading.Thread(target=_drain_stderr, daemon=True)
+            _stderr_thread.start()
             parser = StreamParser(
                 on_text=on_text,
                 on_tool_start=on_tool_start,
@@ -213,6 +214,7 @@ def chat_in_thread(
             for raw_line in proc.stdout:
                 parser.feed(raw_line)
             proc.wait()
+            _stderr_thread.join(timeout=2.0)
             stderr_out = "".join(_stderr_chunks).strip()
             if proc.returncode == 0:
                 if on_status:

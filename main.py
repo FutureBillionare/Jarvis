@@ -3118,13 +3118,21 @@ class SwarmPanel(ctk.CTkFrame):
         """Route a CC-mode tool call through the CC node instead of HUBERT."""
         self.on_tool_call(tool_name, source="CC")
 
-    def on_tool_result(self, tool_name: str, result: str):
+    def log_status(self, msg: str):
+        """Log a status message to the activity feed (public wrapper for _log_event)."""
+        self._log_event("sys", msg)
+
+    def on_tool_result(self, tool_name: str, result: str, dest: str = "HUBERT"):
         nid = f"tool_{tool_name}"
         if nid in self._nodes:
             self._nodes[nid]["last_active"] = self._t
-            self._fire_pulse(nid, "HUBERT", TEXT_TOOL)
+            self._fire_pulse(nid, dest, TEXT_TOOL)
         r = result[:55].replace("\n", " ")
         self._log_event("result", f"   → {r}")
+
+    def on_cc_tool_result(self, tool_name: str, result: str):
+        """Route a CC-mode tool result pulse back to CC node instead of HUBERT."""
+        self.on_tool_result(tool_name, result, dest="CC")
 
     def on_agent_spawn(self, agent_name: str):
         nid = f"agent_{agent_name}"
@@ -4110,9 +4118,10 @@ class HubertApp(ctk.CTk):
                 on_text        = _on_text_cc,
                 on_done        = _on_done_cc,
                 on_error       = lambda e: self._q_put(self._error, e),
+                # CC tool activity routes to SwarmPanel only — no chat bubbles (by design)
                 on_tool_start  = lambda n, p: self._q_put(self.swarm_panel.on_cc_tool_call, n),
-                on_tool_result = lambda n, r: self._q_put(self.swarm_panel.on_tool_result, n, r),
-                on_status      = lambda s: self._q_put(self.swarm_panel._log_event, "sys", s),
+                on_tool_result = lambda n, r: self._q_put(self.swarm_panel.on_cc_tool_result, n, r),
+                on_status      = lambda s: self._q_put(self.swarm_panel.log_status, s),
             )
         elif self._ollama_mode:
             from ollama_orchestrator import chat_in_thread as _oll_chat

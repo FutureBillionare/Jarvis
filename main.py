@@ -3670,6 +3670,7 @@ class HubertApp(ctk.CTk):
         # Col 0 — Swarm panel
         self.swarm_panel = SwarmPanel(self._paned)
         self._paned.add(self.swarm_panel, minsize=180, width=300, stretch="never")
+        self.swarm_panel.add_cc_node()   # CC is the default mode
 
         # Col 1 — Chat column (sphere + chat + voice + input)
         center = tk.Frame(self._paned, bg=BG)
@@ -4104,11 +4105,14 @@ class HubertApp(ctk.CTk):
                     pass
             _cc_chat(
                 api_text,
-                history      = self._cc_history[:-1],  # exclude the turn we just appended
-                last_session = _last_sess,
-                on_text      = _on_text_cc,
-                on_done      = _on_done_cc,
-                on_error     = lambda e: self._q_put(self._error, e),
+                history        = self._cc_history[:-1],  # exclude the turn we just appended
+                last_session   = _last_sess,
+                on_text        = _on_text_cc,
+                on_done        = _on_done_cc,
+                on_error       = lambda e: self._q_put(self._error, e),
+                on_tool_start  = lambda n, p: self._q_put(self.swarm_panel.on_cc_tool_call, n),
+                on_tool_result = lambda n, r: self._q_put(self.swarm_panel.on_tool_result, n, r),
+                on_status      = lambda s: self._q_put(self.swarm_panel._log_event, "sys", s),
             )
         elif self._ollama_mode:
             from ollama_orchestrator import chat_in_thread as _oll_chat
@@ -4349,6 +4353,7 @@ class HubertApp(ctk.CTk):
                 return
             self._ollama_mode      = True
             self._claude_code_mode = False
+            self.swarm_panel.remove_cc_node()
             self.core = self._ollama_core
             model = self._ollama_core.get_model_name()
             self._mode_btn.configure(
@@ -4360,6 +4365,7 @@ class HubertApp(ctk.CTk):
             # Switch back to Claude Code
             self._ollama_mode      = False
             self._claude_code_mode = True
+            self.swarm_panel.add_cc_node()
             self.core = self._claude_core
             self._mode_btn.configure(
                 text="CLAUDE",

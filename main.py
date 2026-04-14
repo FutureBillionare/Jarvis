@@ -3079,6 +3079,8 @@ class SwarmPanel(ctk.CTkFrame):
             pass
 
     def on_tool_call(self, tool_name: str, source: str = "HUBERT"):
+        if source not in self._nodes:
+            return
         nid = f"tool_{tool_name}"
         if nid not in self._nodes:
             x, y = self._place_node("tool")
@@ -3110,6 +3112,7 @@ class SwarmPanel(ctk.CTkFrame):
         """Remove the CC node and all its edges (call when leaving CC mode)."""
         self._nodes.pop("CC", None)
         self._edges = [(f, t) for f, t in self._edges if f != "CC" and t != "CC"]
+        self._pulses = [p for p in self._pulses if p["fid"] != "CC" and p["tid"] != "CC"]
 
     def on_cc_tool_call(self, tool_name: str):
         """Route a CC-mode tool call through the CC node instead of HUBERT."""

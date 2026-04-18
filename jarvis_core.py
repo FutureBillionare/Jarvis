@@ -661,6 +661,20 @@ class JarvisCore:
 
         active_groups = _classify_task_groups_fast(user_msg_text)
 
+        # Force google group and strip browser when message is a Google account task.
+        # This ensures gmail_read etc. are always preferred over Playwright for account tasks.
+        _GOOGLE_SIGNALS = {
+            "gmail", "inbox", "email", "send email", "read email", "my email",
+            "google drive", "my drive", "gdrive", "upload to drive",
+            "google calendar", "my calendar", "calendar event", "schedule",
+            "search console", "google analytics", "analytics", "seo",
+        }
+        if any(sig in user_msg_text.lower() for sig in _GOOGLE_SIGNALS):
+            if "google" not in active_groups:
+                active_groups.append("google")
+            if "browser" in active_groups:
+                active_groups.remove("browser")
+
         # 3. Select model — Haiku for simple conversational messages, Sonnet otherwise
         model = _select_model(user_msg_text)
 

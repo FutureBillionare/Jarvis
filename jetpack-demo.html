@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JetPack X — Beyond Gravity</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink: #04060f;
+      --surface: #0b0f1e;
+      --panel: #111728;
+      --border: #1e2a42;
+      --blue-bright: #3d9cff;
+      --blue-mid: #1a6ecc;
+      --blue-glow: rgba(61,156,255,0.18);
+      --amber: #ff8c00;
+      --flame-hot: #fff4b0;
+      --flame-mid: #ff6b00;
+      --flame-cool: #c0392b;
+      --text-primary: #e8edf8;
+      --text-muted: #6b7a99;
+      --accent-green: #00e5a0;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--ink);
+      color: var(--text-primary);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    /* ─── STAR FIELD ─────────────────────────────────────── */
+    #starfield {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    }
+
+    /* ─── NAV ─────────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 48px;
+      background: rgba(4,6,15,0.7);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-size: 1.25rem; font-weight: 800; letter-spacing: 0.08em;
+      color: var(--blue-bright); text-transform: uppercase;
+    }
+    .nav-logo span { color: var(--amber); }
+    nav ul { list-style: none; display: flex; gap: 36px; }
+    nav ul a { color: var(--text-muted); text-decoration: none; font-size: .875rem; letter-spacing: .04em; transition: color .2s; }
+    nav ul a:hover { color: var(--text-primary); }
+    .nav-cta {
+      background: linear-gradient(135deg, var(--blue-mid), var(--blue-bright));
+      color: #fff; border: none; padding: 10px 22px; border-radius: 6px;
+      font-size: .875rem; font-weight: 600; cursor: pointer; letter-spacing: .04em;
+      transition: transform .15s, box-shadow .15s;
+    }
+    .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 0 20px rgba(61,156,255,0.45); }
+
+    /* ─── HERO ───────────────────────────────────────────── */
+    #hero {
+      position: relative; min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 100px 48px 60px;
+      overflow: hidden;
+    }
+
+    .hero-content {
+      position: relative; z-index: 2;
+      max-width: 560px;
+    }
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 8px;
+      border: 1px solid var(--border); border-radius: 20px;
+      padding: 6px 14px; font-size: .75rem; letter-spacing: .08em;
+      color: var(--blue-bright); margin-bottom: 28px;
+      background: var(--blue-glow);
+      animation: fadeSlideIn .6s ease forwards;
+    }
+    .hero-tag::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent-green); animation: pulse 2s infinite; }
+
+    h1 {
+      font-size: clamp(2.8rem, 6vw, 5rem);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      animation: fadeSlideIn .7s .1s ease both;
+    }
+    h1 em {
+      font-style: normal;
+      background: linear-gradient(120deg, var(--blue-bright), var(--accent-green));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-sub {
+      margin-top: 20px; font-size: 1.1rem; line-height: 1.7;
+      color: var(--text-muted); max-width: 420px;
+      animation: fadeSlideIn .7s .2s ease both;
+    }
+
+    .hero-actions {
+      display: flex; gap: 14px; margin-top: 36px;
+      animation: fadeSlideIn .7s .3s ease both;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--blue-mid), var(--blue-bright));
+      color: #fff; border: none; padding: 14px 30px; border-radius: 8px;
+      font-size: 1rem; font-weight: 700; cursor: pointer;
+      transition: transform .15s, box-shadow .2s;
+      box-shadow: 0 4px 24px rgba(61,156,255,0.35);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(61,156,255,0.55); }
+    .btn-ghost {
+      background: transparent; border: 1px solid var(--border);
+      color: var(--text-primary); padding: 14px 30px; border-radius: 8px;
+      font-size: 1rem; font-weight: 600; cursor: pointer;
+      transition: border-color .2s, background .2s;
+    }
+    .btn-ghost:hover { border-color: var(--blue-bright); background: var(--blue-glow); }
+
+    .hero-stats {
+      display: flex; gap: 36px; margin-top: 52px;
+      animation: fadeSlideIn .7s .4s ease both;
+    }
+    .stat-item { display: flex; flex-direction: column; gap: 4px; }
+    .stat-value { font-size: 1.8rem; font-weight: 800; color: var(--text-primary); }
+    .stat-label { font-size: .75rem; letter-spacing: .08em; color: var(--text-muted); text-transform: uppercase; }
+
+    /* ─── JETPACK SVG SCENE ───────────────────────────────── */
+    .hero-visual {
+      position: absolute; right: 5%; top: 50%; transform: translateY(-50%);
+      z-index: 2; width: 420px;
+      animation: floatScene 4s ease-in-out infinite;
+    }
+
+    @keyframes floatScene {
+      0%, 100% { transform: translateY(-50%) translateY(0px); }
+      50%       { transform: translateY(-50%) translateY(-22px); }
+    }
+
+    /* Flame animations */
+    .flame-a { animation: flameA 0.12s ease-in-out infinite alternate; transform-origin: 50% 0%; }
+    .flame-b { animation: flameB 0.18s ease-in-out infinite alternate; transform-origin: 50% 0%; }
+    .flame-c { animation: flameC 0.09s ease-in-out infinite alternate; transform-origin: 50% 0%; }
+
+    @keyframes flameA { from { transform: scaleX(1) scaleY(1); opacity: 1; } to { transform: scaleX(0.85) scaleY(1.12); opacity: .9; } }
+    @keyframes flameB { from { transform: scaleX(1.1) scaleY(0.9); opacity: .85; } to { transform: scaleX(0.9) scaleY(1.15); opacity: 1; } }
+    @keyframes flameC { from { transform: scaleX(1) scaleY(1.05); opacity: .7; } to { transform: scaleX(1.05) scaleY(0.92); opacity: .95; } }
+
+    /* glow rings */
+    .glow-ring {
+      position: absolute; border-radius: 50%;
+      border: 1px solid rgba(61,156,255,0.25);
+      animation: ringExpand 3s ease-out infinite;
+    }
+    .glow-ring:nth-child(2) { animation-delay: 1s; }
+    .glow-ring:nth-child(3) { animation-delay: 2s; }
+    @keyframes ringExpand {
+      0%   { transform: scale(0.6); opacity: .7; }
+      100% { transform: scale(1.6); opacity: 0; }
+    }
+
+    /* ─── ORBITAL RINGS on hero ─── */
+    .orbit-container {
+      position: absolute; right: 10%; top: 50%; transform: translateY(-50%);
+      width: 500px; height: 500px; pointer-events: none; z-index: 1;
+    }
+    .orbit-ring {
+      position: absolute; border-radius: 50%;
+      border: 1px solid rgba(61,156,255,0.12);
+    }
+    .orbit-ring:nth-child(1) { inset: 0; }
+    .orbit-ring:nth-child(2) { inset: 40px; border-color: rgba(61,156,255,0.08); }
+    .orbit-ring:nth-child(3) { inset: 90px; border-color: rgba(0,229,160,0.1); }
+
+    .orbit-dot {
+      position: absolute; width: 8px; height: 8px; border-radius: 50%;
+      background: var(--blue-bright); box-shadow: 0 0 10px var(--blue-bright);
+      top: 0; left: 50%; transform: translateX(-50%);
+      animation: orbitSpin 6s linear infinite;
+      transform-origin: 4px 250px;
+    }
+    .orbit-dot:nth-child(2) {
+      background: var(--accent-green); box-shadow: 0 0 10px var(--accent-green);
+      animation-duration: 9s; animation-direction: reverse;
+      transform-origin: 4px 210px;
+    }
+    @keyframes orbitSpin { from { transform: rotate(0deg) translateX(-50%); } to { transform: rotate(360deg) translateX(-50%); } }
+
+    /* ─── FEATURES ────────────────────────────────────────── */
+    #features {
+      position: relative; z-index: 2;
+      padding: 100px 48px;
+      background: linear-gradient(180deg, var(--ink) 0%, var(--surface) 100%);
+    }
+    .section-label {
+      text-align: center; color: var(--blue-bright); font-size: .75rem;
+      letter-spacing: .14em; text-transform: uppercase; margin-bottom: 12px;
+    }
+    .section-title {
+      text-align: center; font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 800; letter-spacing: -.02em; margin-bottom: 56px;
+    }
+    .feature-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+      gap: 24px; max-width: 1100px; margin: 0 auto;
+    }
+    .feature-card {
+      background: var(--panel); border: 1px solid var(--border); border-radius: 16px;
+      padding: 32px; transition: border-color .25s, transform .25s, box-shadow .25s;
+      opacity: 0; transform: translateY(30px);
+    }
+    .feature-card.visible { animation: cardIn .5s ease forwards; }
+    .feature-card:hover {
+      border-color: var(--blue-bright);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 40px rgba(61,156,255,0.12);
+    }
+    .card-icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      background: var(--blue-glow); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; margin-bottom: 20px;
+    }
+    .card-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 10px; }
+    .card-desc { font-size: .9rem; line-height: 1.65; color: var(--text-muted); }
+
+    /* ─── SPEC BAR ────────────────────────────────────────── */
+    #specs {
+      position: relative; z-index: 2;
+      padding: 80px 48px;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .spec-row {
+      max-width: 960px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
+    }
+    .spec-item {
+      padding: 32px 28px; text-align: center;
+      border-right: 1px solid var(--border);
+    }
+    .spec-item:last-child { border-right: none; }
+    .spec-num {
+      font-size: 2.6rem; font-weight: 900;
+      background: linear-gradient(120deg, var(--blue-bright), var(--accent-green));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      line-height: 1; margin-bottom: 6px;
+    }
+    .spec-unit { font-size: .85rem; font-weight: 600; color: var(--text-muted); }
+    .spec-label { font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; color: var(--text-muted); margin-top: 4px; }
+
+    /* ─── CTA SECTION ─────────────────────────────────────── */
+    #cta {
+      position: relative; z-index: 2;
+      padding: 120px 48px; text-align: center;
+      background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(29,82,178,0.18) 0%, transparent 70%);
+    }
+    #cta h2 { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 900; letter-spacing: -.025em; margin-bottom: 20px; }
+    #cta p { font-size: 1.1rem; color: var(--text-muted); margin-bottom: 40px; }
+    .cta-glow {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--blue-mid), var(--blue-bright));
+      color: #fff; border: none; padding: 18px 44px; border-radius: 10px;
+      font-size: 1.1rem; font-weight: 700; cursor: pointer;
+      box-shadow: 0 0 48px rgba(61,156,255,0.45);
+      transition: transform .15s, box-shadow .2s;
+    }
+    .cta-glow:hover { transform: translateY(-3px); box-shadow: 0 8px 60px rgba(61,156,255,0.65); }
+
+    /* ─── FOOTER ──────────────────────────────────────────── */
+    footer {
+      position: relative; z-index: 2;
+      padding: 32px 48px;
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: .8rem; color: var(--text-muted);
+    }
+
+    /* ─── ANIMATIONS ──────────────────────────────────────── */
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: .3; }
+    }
+
+    /* particle canvas */
+    #particles { position: fixed; inset: 0; pointer-events: none; z-index: 1; }
+  </style>
+</head>
+<body>
+
+<canvas id="starfield"></canvas>
+<canvas id="particles"></canvas>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Jet<span>X</span></div>
+  <ul>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#specs">Specs</a></li>
+    <li><a href="#cta">Order</a></li>
+  </ul>
+  <button class="nav-cta">Reserve Now</button>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-content">
+    <div class="hero-tag">Now shipping — Series X</div>
+    <h1>Escape<br/><em>Gravity.</em></h1>
+    <p class="hero-sub">The world's first personal jetpack engineered for everyday flight. Hydrogen-hybrid propulsion. 40-minute range. Zero compromise.</p>
+    <div class="hero-actions">
+      <button class="btn-primary">Pre-Order — $24,900</button>
+      <button class="btn-ghost">Watch Demo</button>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <span class="stat-value">204</span>
+        <span class="stat-label">km/h max</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-value">40m</span>
+        <span class="stat-label">flight time</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-value">3kg</span>
+        <span class="stat-label">pack weight</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Orbit rings -->
+  <div class="orbit-container">
+    <div class="orbit-ring"></div>
+    <div class="orbit-ring"></div>
+    <div class="orbit-ring"></div>
+    <div class="orbit-dot"></div>
+    <div class="orbit-dot" style="top:50%;left:0;transform-origin:250px 4px;"></div>
+  </div>
+
+  <!-- Jetpack SVG -->
+  <div class="hero-visual">
+    <svg viewBox="0 0 380 520" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <!-- Flame gradients -->
+        <radialGradient id="flameCore" cx="50%" cy="20%" r="60%">
+          <stop offset="0%" stop-color="#fff8c0"/>
+          <stop offset="40%" stop-color="#ff8c00"/>
+          <stop offset="100%" stop-color="#c0392b" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="flameOuter" cx="50%" cy="10%" r="70%">
+          <stop offset="0%" stop-color="#ff6b00" stop-opacity=".8"/>
+          <stop offset="100%" stop-color="#7b1810" stop-opacity="0"/>
+        </radialGradient>
+        <linearGradient id="packBodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#1e2a42"/>
+          <stop offset="100%" stop-color="#0b0f1e"/>
+        </linearGradient>
+        <linearGradient id="packHighlight" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#3d9cff" stop-opacity=".4"/>
+          <stop offset="100%" stop-color="#3d9cff" stop-opacity="0"/>
+        </linearGradient>
+        <filter id="glow">
+          <feGaussianBlur stdDeviation="8" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="flameGlow">
+          <feGaussianBlur stdDeviation="12" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+
+      <!-- GLOW AURA -->
+      <ellipse cx="190" cy="280" rx="140" ry="160" fill="rgba(61,156,255,0.04)"/>
+
+      <!-- === LEFT THRUSTER === -->
+      <g transform="translate(68, 260)">
+        <!-- Nozzle body -->
+        <rect x="-22" y="0" width="44" height="90" rx="8" fill="url(#packBodyGrad)" stroke="#1e2a42" stroke-width="1.5"/>
+        <rect x="-22" y="0" width="18" height="90" rx="8" fill="url(#packHighlight)" opacity=".3"/>
+        <!-- Rings -->
+        <rect x="-22" y="20" width="44" height="8" rx="2" fill="#1a6ecc" opacity=".6"/>
+        <rect x="-22" y="50" width="44" height="8" rx="2" fill="#1a6ecc" opacity=".6"/>
+        <rect x="-22" y="75" width="44" height="14" rx="4" fill="#0f1825" stroke="#3d9cff" stroke-width="1"/>
+        <!-- Exhaust nozzle -->
+        <path d="M-18,89 L-24,110 L24,110 L18,89 Z" fill="#0a1020" stroke="#1e2a42" stroke-width="1"/>
+
+        <!-- FLAMES -->
+        <g transform="translate(0, 112)" class="flame-a" filter="url(#flameGlow)">
+          <ellipse cx="0" cy="0" rx="18" ry="48" fill="url(#flameCore)" opacity=".95"/>
+        </g>
+        <g transform="translate(-5, 112)" class="flame-b" filter="url(#flameGlow)">
+          <ellipse cx="0" cy="0" rx="12" ry="38" fill="url(#flameOuter)" opacity=".8"/>
+        </g>
+        <g transform="translate(5, 112)" class="flame-c" filter="url(#flameGlow)">
+          <ellipse cx="0" cy="0" rx="10" ry="32" fill="url(#flameOuter)" opacity=".7"/>
+        </g>
+        <!-- Heat shimmer dot -->
+        <circle cx="0" cy="108" r="4" fill="#fff8c0" opacity=".9" filter="url(#glow)"/>
+      </g>
+
+      <!-- === RIGHT THRUSTER === -->
+      <g transform="translate(312, 260)">
+        <rect x="-22" y="0" width="44" height="90" rx="8" fill="url(#packBodyGrad)" stroke="#1e2a42" stroke-width="1.5"/>
+        <rect x="-22" y="0" width="18" height="90" rx="8" fill="url(#packHighlight)" opacity=".3"/>
+        <rect x="-22" y="20" width="44" height="8" rx="2" fill="#1a6ecc" opacity=".6"/>
+        <rect x="-22" y="50" width="44" height="8" rx="2" fill="#1a6ecc" opacity=".6"/>
+        <rect x="-22" y="75" width="44" height="14" rx="4" fill="#0f1825" stroke="#3d9cff" stroke-width="1"/>
+        <path d="M-18,89 L-24,110 L24,110 L18,89 Z" fill="#0a1020" stroke="#1e2a42" stroke-width="1"/>
+
+        <g transform="translate(0, 112)" class="flame-b" filter="url(#flameGlow)">
+          <ellipse cx="0" cy="0" rx="18" ry="48" fill="url(#flameCore)" opacity=".95"/>
+        </g>
+        <g transform="translate(4, 112)" class="flame-a" filter="url(#flameGlow)">
+          <ellipse cx="0" cy="0" rx="12" ry="40" fill="url(#flameOuter)" opacity=".8"/>
+        </g>
+        <g transform="translate(-4, 112)" class="flame-c" filter="url(#flameGlow)">
+          <ellipse cx="0" cy="0" rx="10" ry="34" fill="url(#flameOuter)" opacity=".7"/>
+        </g>
+        <circle cx="0" cy="108" r="4" fill="#fff8c0" opacity=".9" filter="url(#glow)"/>
+      </g>
+
+      <!-- === MAIN PACK BODY === -->
+      <rect x="105" y="120" width="170" height="230" rx="24" fill="url(#packBodyGrad)" stroke="#1e2a42" stroke-width="2"/>
+      <!-- body highlight -->
+      <rect x="105" y="120" width="70" height="230" rx="24" fill="url(#packHighlight)" opacity=".2"/>
+
+      <!-- Central spine -->
+      <rect x="183" y="130" width="14" height="210" rx="5" fill="#0f1825" stroke="#1a6ecc" stroke-width="1"/>
+      <!-- Spine LEDs -->
+      <circle cx="190" cy="155" r="4" fill="#3d9cff" filter="url(#glow)"/>
+      <circle cx="190" cy="185" r="4" fill="#00e5a0" filter="url(#glow)"/>
+      <circle cx="190" cy="215" r="4" fill="#3d9cff" filter="url(#glow)"/>
+      <circle cx="190" cy="245" r="4" fill="#00e5a0" filter="url(#glow)"/>
+      <circle cx="190" cy="275" r="3" fill="#3d9cff" filter="url(#glow)"/>
+      <circle cx="190" cy="300" r="3" fill="#ff8c00" filter="url(#glow)"/>
+
+      <!-- Left panel detail -->
+      <rect x="118" y="150" width="55" height="80" rx="8" fill="#0f1825" stroke="#1e2a42" stroke-width="1"/>
+      <rect x="124" y="158" width="43" height="30" rx="4" fill="#0a1020"/>
+      <!-- mini screen -->
+      <rect x="126" y="160" width="39" height="26" rx="3" fill="#0d2240" stroke="#1a6ecc" stroke-width=".5"/>
+      <line x1="126" y1="170" x2="165" y2="170" stroke="#1a6ecc" stroke-width=".5" opacity=".5"/>
+      <line x1="126" y1="178" x2="155" y2="178" stroke="#00e5a0" stroke-width=".5" opacity=".6"/>
+      <rect x="124" y="196" width="12" height="12" rx="3" fill="#1a6ecc" opacity=".7"/>
+      <rect x="140" y="196" width="12" height="12" rx="3" fill="#0d2240" stroke="#1e2a42"/>
+      <rect x="156" y="196" width="12" height="12" rx="3" fill="#0d2240" stroke="#1e2a42"/>
+      <rect x="118" y="240" width="55" height="30" rx="6" fill="#0f1825" stroke="#1e2a42"/>
+      <text x="145" y="260" text-anchor="middle" fill="#3d9cff" font-size="9" font-family="monospace">204 km/h</text>
+
+      <!-- Right panel detail -->
+      <rect x="207" y="150" width="55" height="80" rx="8" fill="#0f1825" stroke="#1e2a42" stroke-width="1"/>
+      <!-- fuel gauge -->
+      <rect x="214" y="158" width="41" height="14" rx="3" fill="#0a1020" stroke="#1e2a42"/>
+      <rect x="215" y="159" width="31" height="12" rx="2" fill="#00e5a0" opacity=".7"/>
+      <text x="233" y="183" text-anchor="middle" fill="#6b7a99" font-size="8" font-family="monospace">FUEL 76%</text>
+      <!-- gyro dial -->
+      <circle cx="234" cy="208" r="16" fill="#0a1020" stroke="#1a6ecc" stroke-width="1.5"/>
+      <line x1="234" y1="196" x2="234" y2="202" stroke="#1a6ecc" stroke-width="1"/>
+      <line x1="234" y1="214" x2="234" y2="220" stroke="#1a6ecc" stroke-width="1"/>
+      <line x1="222" y1="208" x2="228" y2="208" stroke="#1a6ecc" stroke-width="1"/>
+      <line x1="240" y1="208" x2="246" y2="208" stroke="#1a6ecc" stroke-width="1"/>
+      <line x1="234" y1="208" x2="240" y2="202" stroke="#00e5a0" stroke-width="1.5" stroke-linecap="round"/>
+      <circle cx="234" cy="208" r="2" fill="#3d9cff"/>
+      <rect x="207" y="236" width="55" height="30" rx="6" fill="#0f1825" stroke="#1e2a42"/>
+      <text x="234" y="256" text-anchor="middle" fill="#00e5a0" font-size="9" font-family="monospace">ALT 340m</text>
+
+      <!-- connector arms -->
+      <path d="M86,290 C86,290 105,295 105,295" stroke="#1e2a42" stroke-width="8" stroke-linecap="round" fill="none"/>
+      <path d="M275,295 C275,295 294,290 294,290" stroke="#1e2a42" stroke-width="8" stroke-linecap="round" fill="none"/>
+      <path d="M86,290 C86,290 105,295 105,295" stroke="#3d9cff" stroke-width="1" stroke-linecap="round" fill="none" opacity=".4"/>
+
+      <!-- Top strap bar -->
+      <rect x="130" y="108" width="120" height="22" rx="8" fill="#0f1825" stroke="#1e2a42" stroke-width="1.5"/>
+      <rect x="150" y="113" width="80" height="12" rx="4" fill="#1a6ecc" opacity=".3"/>
+      <circle cx="190" cy="119" r="5" fill="#0a1020" stroke="#3d9cff" stroke-width="1.5"/>
+
+      <!-- Bottom nozzle manifold -->
+      <rect x="130" y="345" width="120" height="22" rx="6" fill="#0f1825" stroke="#1e2a42" stroke-width="1.5"/>
+      <rect x="150" y="349" width="80" height="14" rx="3" fill="#0a1020"/>
+      <!-- manifold ports -->
+      <circle cx="165" cy="356" r="5" fill="#0a1020" stroke="#ff8c00" stroke-width="1.5"/>
+      <circle cx="190" cy="356" r="5" fill="#0a1020" stroke="#ff8c00" stroke-width="1.5"/>
+      <circle cx="215" cy="356" r="5" fill="#0a1020" stroke="#ff8c00" stroke-width="1.5"/>
+
+      <!-- brand text -->
+      <text x="190" y="340" text-anchor="middle" fill="#1a6ecc" font-size="11" font-family="monospace" letter-spacing="4" opacity=".7">JET — X</text>
+    </svg>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features">
+  <p class="section-label">Why JetPack X</p>
+  <h2 class="section-title">Engineered for the<br/>edge of possibility</h2>
+  <div class="feature-grid">
+    <div class="feature-card">
+      <div class="card-icon">⚡</div>
+      <div class="card-title">H₂ Hybrid Core</div>
+      <div class="card-desc">Dual hydrogen-kerosene combustion delivers 2,400 N thrust with a cleaner burn profile. Regenerative heat exchange keeps fuel consumption 40% below competitors.</div>
+    </div>
+    <div class="feature-card">
+      <div class="card-icon">🧭</div>
+      <div class="card-title">Neural Stabilisation</div>
+      <div class="card-desc">1,000 Hz IMU feeds a real-time control loop. The pack corrects pitch, roll, and yaw before you feel them — hands-free hover to ±0.3°.</div>
+    </div>
+    <div class="feature-card">
+      <div class="card-icon">🛡️</div>
+      <div class="card-title">Triple Redundancy</div>
+      <div class="card-desc">Three independent thruster nozzles, dual flight computers, and a ballistic parachute system rated to 200 km/h activation. Safety isn't optional.</div>
+    </div>
+    <div class="feature-card">
+      <div class="card-icon">📡</div>
+      <div class="card-title">Live Telemetry</div>
+      <div class="card-desc">Altitude, airspeed, fuel state, and biometrics stream to your wrist display and mobile app. Automatic ATC handshake in Class D–G airspace.</div>
+    </div>
+    <div class="feature-card">
+      <div class="card-icon">🔧</div>
+      <div class="card-title">Modular Bay System</div>
+      <div class="card-desc">Swap power cells in 90 seconds. The accessory bay accepts extended-range tanks, cargo pods, and upcoming photovoltaic sail modules.</div>
+    </div>
+    <div class="feature-card">
+      <div class="card-icon">🌍</div>
+      <div class="card-title">Global Certification</div>
+      <div class="card-desc">FAA, EASA, and CAA type-approved for recreational and commercial use. Includes 12 months of airspace intelligence via JetX Cloud.</div>
+    </div>
+  </div>
+</section>
+
+<!-- SPECS -->
+<section id="specs">
+  <div class="spec-row">
+    <div class="spec-item">
+      <div class="spec-num">204</div>
+      <div class="spec-unit">km/h</div>
+      <div class="spec-label">Top Speed</div>
+    </div>
+    <div class="spec-item">
+      <div class="spec-num">40</div>
+      <div class="spec-unit">min</div>
+      <div class="spec-label">Flight Time</div>
+    </div>
+    <div class="spec-item">
+      <div class="spec-num">3.1</div>
+      <div class="spec-unit">kg</div>
+      <div class="spec-label">Pack Weight</div>
+    </div>
+    <div class="spec-item">
+      <div class="spec-num">3.8</div>
+      <div class="spec-unit">kN</div>
+      <div class="spec-label">Peak Thrust</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <h2>Ready to leave<br/>the ground behind?</h2>
+  <p>Join 4,200 pilots on the waitlist. Deliveries begin Q3 2026.</p>
+  <button class="cta-glow">Reserve Your Unit — $2,400 Deposit</button>
+</section>
+
+<footer>
+  <span>© 2026 JetPack X Corp. All rights reserved.</span>
+  <span>FAA · EASA · CAA Approved</span>
+</footer>
+
+<script>
+  // ─── STARFIELD ──────────────────────────────────────────────────────────
+  (function () {
+    const canvas = document.getElementById('starfield');
+    const ctx = canvas.getContext('2d');
+    let stars = [];
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      stars = Array.from({ length: 220 }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 1.4 + 0.2,
+        alpha: Math.random() * 0.7 + 0.1,
+        speed: Math.random() * 0.3 + 0.05,
+        twinkleSpeed: Math.random() * 0.02 + 0.005,
+        twinklePhase: Math.random() * Math.PI * 2
+      }));
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    let t = 0;
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      t += 0.016;
+      stars.forEach(s => {
+        const a = s.alpha * (0.6 + 0.4 * Math.sin(t * s.twinkleSpeed * 60 + s.twinklePhase));
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(200,220,255,${a})`;
+        ctx.fill();
+        // slow drift
+        s.y += s.speed * 0.05;
+        if (s.y > canvas.height) { s.y = 0; s.x = Math.random() * canvas.width; }
+      });
+      requestAnimationFrame(draw);
+    }
+    draw();
+  })();
+
+  // ─── EXHAUST PARTICLES ─────────────────────────────────────────────────
+  (function () {
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+    let W, H, particles = [];
+
+    function resize() {
+      W = canvas.width = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    // find visual center of thrusters — approximate screen coords
+    // The hero SVG is positioned at right:5%, centered vertically
+    // We'll emit from two dynamic points based on window size
+    function thrusterPositions() {
+      const heroRect = document.getElementById('hero');
+      if (!heroRect) return [];
+      const heroH = heroRect.offsetHeight;
+      const svgW = Math.min(420, W * 0.4);
+      const svgRight = W * 0.05;
+      const svgCenterX = W - svgRight - svgW / 2;
+      const svgTop = (H - svgW * (520 / 380)) / 2 + 80;
+      const svgH = svgW * (520 / 380);
+      // thruster positions in SVG viewBox: left=(68,370), right=(312,370), out of 380x520
+      const scale = svgW / 380;
+      const lx = svgCenterX - svgW / 2 + 68 * scale;
+      const rx = svgCenterX - svgW / 2 + 312 * scale;
+      const ty = svgTop + 370 * scale;
+      return [{ x: lx, y: ty }, { x: rx, y: ty }];
+    }
+
+    function spawnParticle(x, y) {
+      const angle = (Math.PI / 2) + (Math.random() - 0.5) * 0.5;
+      const speed = Math.random() * 3 + 1.5;
+      particles.push({
+        x, y,
+        vx: Math.cos(angle) * speed * (Math.random() > 0.5 ? 0.4 : -0.4),
+        vy: Math.sin(angle) * speed,
+        life: 1,
+        decay: Math.random() * 0.025 + 0.015,
+        r: Math.random() * 5 + 2,
+        hue: Math.random() > 0.5 ? 30 : 50
+      });
+    }
+
+    let frame = 0;
+    function loop() {
+      ctx.clearRect(0, 0, W, H);
+      frame++;
+
+      if (frame % 2 === 0) {
+        const pts = thrusterPositions();
+        pts.forEach(p => {
+          for (let i = 0; i < 4; i++) spawnParticle(p.x, p.y);
+        });
+      }
+
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.08;
+        p.life -= p.decay;
+        p.r *= 0.97;
+        if (p.life <= 0 || p.r < 0.3) { particles.splice(i, 1); continue; }
+
+        const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
+        grad.addColorStop(0, `hsla(${p.hue}, 100%, 90%, ${p.life})`);
+        grad.addColorStop(0.4, `hsla(${p.hue - 10}, 100%, 60%, ${p.life * 0.7})`);
+        grad.addColorStop(1, `hsla(${p.hue - 20}, 80%, 30%, 0)`);
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = grad;
+        ctx.fill();
+      }
+      requestAnimationFrame(loop);
+    }
+    loop();
+  })();
+
+  // ─── SCROLL REVEAL for feature cards ──────────────────────────────────
+  (function () {
+    const cards = document.querySelectorAll('.feature-card');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 90);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    cards.forEach(c => observer.observe(c));
+  })();
+</script>
+</body>
+</html>

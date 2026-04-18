@@ -101,15 +101,45 @@ for _g, _names in TOOL_GROUPS.items():
         _tool_to_group[_n] = _g
 
 
-def get_tool_definitions_for_groups(groups: list[str]) -> list[dict]:
-    """Return only the tool definitions belonging to the requested groups.
+ALWAYS_ON_GROUPS = {"core", "google"}
 
-    "core" is always added. Any tool not in any known group is excluded.
+# Browser tools that have a Google API equivalent — suppress when google group active
+_BROWSER_GOOGLE_OVERLAP = {
+    "browser_navigate", "browser_launch", "browser_click", "browser_type",
+    "browser_get_text", "browser_get_page_content", "browser_find_elements",
+    "browser_screenshot", "browser_execute_js", "browser_wait_for",
+    "browser_select", "browser_press_key", "browser_scroll",
+}
+
+# Keywords that indicate a Google account task (not general web browsing)
+_GOOGLE_TASK_SIGNALS = {
+    "gmail", "inbox", "email", "send email", "read email", "draft",
+    "google drive", "gdrive", "my drive", "upload to drive",
+    "google calendar", "my calendar", "schedule", "add event",
+    "search console", "google analytics", "seo data",
+}
+
+
+def get_tool_definitions_for_groups(groups: list[str]) -> list[dict]:
+    """Return tool definitions for the requested groups.
+
+    - core + google are always included.
+    - If a Google account task is detected, browser tools that overlap with
+      Google API tools are suppressed so HUBERT uses the API, not Playwright.
     """
-    wanted: set[str] = set(TOOL_GROUPS.get("core", []))
-    for g in groups:
+    wanted: set[str] = set()
+    for g in ALWAYS_ON_GROUPS | set(groups):
         wanted.update(TOOL_GROUPS.get(g, []))
-    return [d for d in _tool_definitions if d["name"] in wanted]
+
+    # If google group is active alongside browser, keep browser tools
+    # but mark google tools as preferred via ordering (google tools first)
+    all_tools = [d for d in _tool_definitions if d["name"] in wanted]
+
+    # Sort: google tools first so Claude sees them before browser alternatives
+    google_names = set(TOOL_GROUPS.get("google", []))
+    all_tools.sort(key=lambda d: (0 if d["name"] in google_names else 1))
+
+    return all_tools
 
 
 def register_tool(definition: dict, handler: Callable):

@@ -99,6 +99,13 @@ async def _fill_common_fields(page):
         ("input[name*='graduation'], input[id*='graduation']", E["graduation_year"]),
         # LinkedIn URL
         ("input[name*='linkedin'], input[id*='linkedin']", P.get("linkedin", "")),
+        # Work authorization
+        ("input[name*='authorized'], input[id*='authorized']", "Yes"),
+        # Relocate
+        ("input[name*='relocat'], input[id*='relocat']", "Yes"),
+        # Start date
+        ("input[name*='start'], input[id*='start_date'], input[placeholder*='start']",
+         _PROFILE["personal"].get("earliest_start_date", "June 10, 2025")),
     ]
     for selector, value in mappings:
         if value:
@@ -202,6 +209,7 @@ async def _apply_greenhouse(page, listing: dict, status_cb: Callable | None) -> 
         )
 
         await _fill_common_fields(page)
+        await _fill_salary_fields(page, listing)
 
         # Submit
         submit = page.locator("input[type='submit'], button[type='submit'], button:has-text('Submit')").first
@@ -252,6 +260,7 @@ async def _apply_lever(page, listing: dict, status_cb: Callable | None) -> bool:
             "textarea[name='comments']",
             _generate_cover_letter(listing),
         )
+        await _fill_salary_fields(page, listing)
 
         submit = page.locator("button[type='submit'], input[type='submit']").first
         if await submit.count() > 0:
@@ -269,6 +278,32 @@ async def _apply_lever(page, listing: dict, status_cb: Callable | None) -> bool:
 
 # ── Generic Form Filler ───────────────────────────────────────────────────────
 
+async def _fill_salary_fields(page, listing: dict):
+    """Fill salary fields with industry-average-plus-10% estimate."""
+    salary_text = _estimate_salary(listing)
+    # Extract just the numeric dollar amount for numeric fields
+    import re
+    match = re.search(r"\$(\d+)", salary_text)
+    numeric_val = match.group(1) if match else "20"
+    selectors = [
+        "input[name*='salary'], input[id*='salary'], input[placeholder*='salary']",
+        "input[name*='compensation'], input[id*='compensation']",
+        "input[name*='pay'], input[id*='pay_rate']",
+        "textarea[name*='salary'], textarea[id*='salary']",
+    ]
+    for sel in selectors:
+        try:
+            el = page.locator(sel).first
+            if await el.count() > 0:
+                tag = await el.evaluate("el => el.tagName.toLowerCase()")
+                if tag == "textarea":
+                    await el.fill(salary_text)
+                else:
+                    await el.fill(numeric_val)
+        except Exception:
+            pass
+
+
 async def _apply_generic(page, listing: dict, status_cb: Callable | None) -> bool:
     def emit(msg):
         log.info(msg)
@@ -281,6 +316,7 @@ async def _apply_generic(page, listing: dict, status_cb: Callable | None) -> boo
         await page.goto(listing["url"], wait_until="networkidle", timeout=30000)
         await page.wait_for_timeout(2000)
         await _fill_common_fields(page)
+        await _fill_salary_fields(page, listing)
 
         # Try resume upload
         try:

@@ -1,2 +1,3 @@
-2026/04/17-20:01:31.741 47c4 Creating DB C:\Users\Jake\Jarvis\.playwright-mcp\Default\Session Storage since it was missing.
-2026/04/17-20:01:31.785 47c4 Reusing MANIFEST C:\Users\Jake\Jarvis\.playwright-mcp\Default\Session Storage/MANIFEST-000001
+2026/04/17-20:05:10.167 5d6c Reusing MANIFEST C:\Users\Jake\Jarvis\.playwright-mcp\Default\Session Storage/MANIFEST-000001
+2026/04/17-20:05:10.167 5d6c Recovering log #3
+2026/04/17-20:05:10.169 5d6c Reusing old log C:\Users\Jake\Jarvis\.playwright-mcp\Default\Session Storage/000003.log 

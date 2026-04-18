@@ -21,7 +21,28 @@ _TURN_MAX_CHARS = 600 # truncate very long turns in the history prefix
 
 
 def _find_claude_bin() -> str | None:
-    return shutil.which("claude")
+    # shutil.which only searches the GUI app's restricted PATH — expand it with
+    # common install locations so npm/local installs are found.
+    import os
+    from pathlib import Path
+    extra = [
+        Path.home() / ".local" / "bin",
+        Path("/usr/local/bin"),
+        Path("/opt/homebrew/bin"),
+        Path.home() / ".npm-global" / "bin",
+        Path("/usr/local/lib/node_modules/.bin"),
+    ]
+    # Also honour any nvm default alias
+    nvm_default = Path.home() / ".nvm" / "alias" / "default"
+    if nvm_default.exists():
+        try:
+            ver = nvm_default.read_text().strip()
+            extra.append(Path.home() / ".nvm" / "versions" / "node" / ver / "bin")
+        except Exception:
+            pass
+
+    augmented_path = os.pathsep.join(str(p) for p in extra) + os.pathsep + os.environ.get("PATH", "")
+    return shutil.which("claude", path=augmented_path)
 
 
 _EXTRA_FLAGS = [
@@ -195,6 +216,8 @@ def chat_in_thread(
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 text=True,
+                encoding="utf-8",
+                errors="replace",
                 bufsize=1,
             )
             if on_status:
@@ -203,7 +226,8 @@ def chat_in_thread(
             # produces large output while stdout is still being read
             _stderr_chunks: list[str] = []
             def _drain_stderr():
-                _stderr_chunks.append(proc.stderr.read())
+                for chunk in proc.stderr:
+                    _stderr_chunks.append(chunk)
             _stderr_thread = threading.Thread(target=_drain_stderr, daemon=True)
             _stderr_thread.start()
             parser = StreamParser(
@@ -212,7 +236,10 @@ def chat_in_thread(
                 on_tool_result=on_tool_result,
             )
             for raw_line in proc.stdout:
-                parser.feed(raw_line)
+                try:
+                    parser.feed(raw_line)
+                except Exception:
+                    pass
             proc.wait()
             _stderr_thread.join(timeout=2.0)
             stderr_out = "".join(_stderr_chunks).strip()

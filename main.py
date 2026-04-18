@@ -11,7 +11,7 @@ from config import get_api_key, set_api_key
 
 _IS_WIN = platform.system() == "Windows"
 _IS_MAC = platform.system() == "Darwin"
-_MONO_FONT = "Menlo" if _IS_MAC else _MONO_FONT
+_MONO_FONT = "Menlo" if _IS_MAC else "Consolas"
 
 # ── Speech globals (cached so mic presses are instant after first use) ─────────
 _whisper_model   = None

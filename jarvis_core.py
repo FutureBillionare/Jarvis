@@ -92,6 +92,13 @@ _GROUP_KEYWORDS: dict[str, set[str]] = {
         "eonet", "nasa", "natural event", "disaster", "earthquake",
         "wildfire", "storm", "flood",
     },
+    "google": {
+        "gmail", "email", "send email", "read email", "inbox", "mail",
+        "google drive", "drive", "gdrive", "upload file", "share file",
+        "google calendar", "calendar", "schedule", "event", "meeting",
+        "search console", "analytics", "google analytics", "seo", "traffic",
+        "google account", "hubert.the.bot",
+    },
 }
 
 # Keywords that force Sonnet (complex/agentic tasks)
@@ -124,11 +131,12 @@ def _classify_task_groups_ollama(message: str) -> list[str]:
         system = (
             "You are a task router. Given a user message, return ONLY a comma-separated list "
             "of needed tool groups from this exact set:\n"
-            "computer, browser, swarm, github, memory, web, productivity, creative, supabase, meta, eonet\n\n"
+            "computer, browser, swarm, github, memory, web, productivity, creative, supabase, meta, eonet, google\n\n"
             "computer=GUI/mouse/keyboard, browser=web browsing, swarm=parallel agents,\n"
             "github=git/repos, memory=obsidian/notes/dreams, web=scraping/vercel/deploy,\n"
             "productivity=tasks/todos/voice, creative=diagrams/notebooks,\n"
-            "supabase=database, meta=tools/self-repair, eonet=nasa/disasters\n\n"
+            "supabase=database, meta=tools/self-repair, eonet=nasa/disasters,\n"
+            "google=gmail/drive/calendar/search-console/analytics\n\n"
             "Return ONLY the group names needed (e.g. 'computer,browser') or 'none'."
         )
         resp = oc.run_task(system, f"Message: {message[:300]}", max_tokens=30)

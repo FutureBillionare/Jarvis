@@ -3,30 +3,42 @@
     "first_name": "Jake",
     "last_name": "Goncalves",
     "full_name": "Jake Goncalves",
-    "email": "jakegoncalves2002@email.com",
-    "phone": "(682) 999-1810",
+    "email": "jakegoncalves2002@gmail.com",
+    "phone": "682-999-1810",
     "address": "1725 Harvey Mitchel Parkway S",
     "city": "College Station",
     "state": "TX",
     "zip": "77840",
     "linkedin": "",
     "github": "",
-    "website": ""
+    "website": "",
+    "us_work_authorized": true,
+    "requires_sponsorship": "possibly",
+    "willing_to_relocate": true,
+    "preferred_work_type": "any",
+    "earliest_start_date": "June 10, 2025"
   },
   "education": {
-    "school": "Texas A&M University",
-    "degree": "Bachelor of Science in Engineering",
+    "current_school": "Blinn College",
+    "transfer_plan": "Planning to transfer to Texas A&M University",
+    "degree": "Associate / Transfer (Engineering track)",
     "major": "Engineering",
-    "gpa": "",
-    "graduation_year": "2029",
+    "gpa": "3.8",
+    "graduation_year": "2030",
     "location": "College Station, TX",
-    "in_progress": true
+    "in_progress": true,
+    "high_school": "Southlake Carroll Senior High School",
+    "hs_gpa_weighted": "4.2",
+    "hs_diploma": "High School Diploma (Graduated with Honors)",
+    "relevant_coursework": ["AutoCAD Certification"]
   },
   "skills": [
     "Python",
     "AutoCAD",
+    "Artificial Intelligence",
     "Machine Learning",
-    "AI/ML",
+    "Fast Learner",
+    "Physical Labor",
     "Adaptive Aerodynamics",
     "Robotics",
     "Leadership",
@@ -34,13 +46,40 @@
     "Team Collaboration"
   ],
   "experience": [],
+  "extracurricular": [
+    "Black Belt in Tae Kwon Do – discipline, leadership, long-term commitment",
+    "Assistant Instructor – Tae Kwon Do Youth Program",
+    "Piano Performance – Blues, Jazz, and contemporary music",
+    "Sailing Enthusiast – navigation, teamwork, endurance",
+    "Varsity Tennis – Southlake Carroll High School"
+  ],
   "interests": [
     "AI",
     "Machine Learning",
     "Adaptive Aerodynamics",
     "Robotics",
-    "Computational Systems"
+    "Computational Systems",
+    "Engineering"
   ],
+  "application_answers": {
+    "tell_us_about_yourself": "I am a hard working and ambitious person looking to help out wherever needed. I bring a variety of skills to the table and can learn quickly if needed. My background in martial arts has given me the discipline and focus to take on any challenge.",
+    "why_this_role": "I am looking for hard, honest work and this role gives me just that chance. I am also eager to grow my skillset and gain real-world experience that complements my engineering coursework.",
+    "why_this_company": "I relate to the company's mission and believe I can contribute meaningfully to the team. I'm drawn to organizations that value hard work and growth.",
+    "cover_letter_style": "Clean, professional, and personal"
+  },
+  "automation_rules": {
+    "submission_mode": "auto_submit_low_risk",
+    "flag_high_risk_for_approval": true,
+    "fill_optional_questions": true,
+    "salary_strategy": "industry_average_plus_10_percent",
+    "demographic_questions": "use_profile_data_query_chat_if_needed",
+    "self_improve": true,
+    "notes": "Keep chat queries to a minimum. Try to answer everything autonomously. When unsure about a question, save it back to the questionnaire for future reference."
+  },
+  "documents": {
+    "resume_path": "C:\\Users\\Jake\\Downloads\\Resume V1 - Google Docs.pdf",
+    "resume_label": "RESUME V1"
+  },
   "internship_search": {
     "job_titles": [
       "Engineering Intern",
@@ -50,11 +89,14 @@
       "Robotics Intern",
       "Aerospace Engineering Intern",
       "Computer Science Intern",
-      "Research Engineering Intern"
+      "Research Engineering Intern",
+      "Field Engineering Intern",
+      "General Labor / Engineering Support Intern"
     ],
-    "locations": ["Texas", "Remote", "Houston TX", "Dallas TX", "Austin TX"],
+    "locations": ["Texas", "Remote", "Houston TX", "Dallas TX", "Austin TX", "Nationwide"],
     "date_range": "July 2025 - August 2025",
     "internship_months": ["July", "August"],
-    "internship_year": "2025"
+    "internship_year": "2025",
+    "earliest_start": "June 10, 2025"
   }
 }

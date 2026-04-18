@@ -19,7 +19,10 @@ log = logging.getLogger(__name__)
 
 _BASE = Path(__file__).parent
 _PROFILE = json.loads((_BASE / "profile.json").read_text())
-_RESUME_PATH = str(Path.home() / "Downloads" / "Resume V1 - Google Docs.pdf")
+_RESUME_PATH = _PROFILE.get("documents", {}).get(
+    "resume_path",
+    str(Path.home() / "Downloads" / "Resume V1 - Google Docs.pdf"),
+)
 
 P = _PROFILE["personal"]
 E = _PROFILE["education"]
@@ -305,19 +308,40 @@ async def _apply_generic(page, listing: dict, status_cb: Callable | None) -> boo
 
 # ── Cover Letter Generator ────────────────────────────────────────────────────
 
+def _estimate_salary(listing: dict) -> str:
+    """Return a salary ask 10% above estimated industry average for the role."""
+    title = listing.get("title", "").lower()
+    # Rough industry averages for intern hourly rates (annualized for salaried fields)
+    if any(k in title for k in ["software", "ml", "ai", "data", "computer"]):
+        avg = 25  # $/hr
+    elif any(k in title for k in ["mechanical", "aerospace", "civil", "chemical"]):
+        avg = 20
+    else:
+        avg = 18
+    ask = round(avg * 1.10, 2)
+    return (
+        f"${ask:.0f}/hr — based on industry average of ~${avg}/hr for this role type. "
+        f"I understand the value of the skills and discipline I bring to the table and believe "
+        f"this reflects fair compensation."
+    )
+
+
 def _generate_cover_letter(listing: dict) -> str:
+    aa = _PROFILE.get("application_answers", {})
     return (
         f"Dear Hiring Team,\n\n"
         f"I am excited to apply for the {listing['title']} position at {listing['company']}. "
-        f"As a first-year engineering student at Texas A&M University pursuing a Bachelor of Science in Engineering "
-        f"with a focus on computational systems, AI, and applied mathematics, I am eager to contribute "
-        f"to your team this summer.\n\n"
-        f"I have been building practical skills in Python, machine learning frameworks, and AI systems "
-        f"through a personal LLM development project. My academic background, combined with demonstrated "
-        f"leadership as a Black Belt Tae Kwon Do instructor and STEM honors graduate, reflects the "
-        f"discipline and drive I bring to every endeavor.\n\n"
-        f"I would welcome the opportunity to bring my technical curiosity and work ethic to {listing['company']} "
-        f"this {_PROFILE['internship_search']['date_range']}.\n\n"
+        f"I am a driven and hard-working individual currently studying at Blinn College on an engineering "
+        f"transfer track toward Texas A&M University. My coursework, combined with hands-on projects in "
+        f"Python, AI, and machine learning, has given me a strong technical foundation I am eager to apply "
+        f"in a real-world setting.\n\n"
+        f"Beyond academics, I hold a Black Belt in Tae Kwon Do and have served as an assistant instructor "
+        f"for youth programs — experiences that have instilled in me the discipline, focus, and leadership "
+        f"I bring to every endeavor. I graduated from Southlake Carroll Senior High School with honors "
+        f"(weighted GPA 4.2) and hold an AutoCAD certification.\n\n"
+        f"{aa.get('why_this_role', 'I am looking for hard, honest work and a chance to grow.')}\n\n"
+        f"I would welcome the opportunity to contribute to {listing['company']} "
+        f"starting as early as June 10, 2025.\n\n"
         f"Thank you for your consideration,\n{P['full_name']}\n{P['email']} | {P['phone']}"
     )
 

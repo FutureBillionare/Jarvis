@@ -1,0 +1,31 @@
+# Secrets & config with keys
+jarvis_config.json
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Logs
+*.log
+*.log.*
+
+# DB files
+*.db
+*.db-shm
+*.db-wal
+
+# OS
+.DS_Store
+
+# Internal state
+.memory_pipeline_last_run
+.project_state.json
+last_session.md
+hubert_daily_tokens.json
+
+# Superpowers runtime
+.superpowers/
+
+# React native cache
+React/

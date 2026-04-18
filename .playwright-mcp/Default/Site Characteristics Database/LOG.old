@@ -1,2 +1,3 @@
-2026/04/17-20:01:31.648 6158 Creating DB C:\Users\Jake\Jarvis\.playwright-mcp\Default\Site Characteristics Database since it was missing.
-2026/04/17-20:01:31.680 6158 Reusing MANIFEST C:\Users\Jake\Jarvis\.playwright-mcp\Default\Site Characteristics Database/MANIFEST-000001
+2026/04/17-20:05:10.085 2368 Reusing MANIFEST C:\Users\Jake\Jarvis\.playwright-mcp\Default\Site Characteristics Database/MANIFEST-000001
+2026/04/17-20:05:10.085 2368 Recovering log #3
+2026/04/17-20:05:10.086 2368 Reusing old log C:\Users\Jake\Jarvis\.playwright-mcp\Default\Site Characteristics Database/000003.log 

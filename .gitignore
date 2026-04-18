@@ -30,3 +30,4 @@ hubert_daily_tokens.json
 
 # React native cache
 React/
+.secrets/

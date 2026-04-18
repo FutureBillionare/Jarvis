@@ -1,0 +1,60 @@
+{
+  "personal": {
+    "first_name": "Jake",
+    "last_name": "Goncalves",
+    "full_name": "Jake Goncalves",
+    "email": "jakegoncalves2002@email.com",
+    "phone": "(682) 999-1810",
+    "address": "1725 Harvey Mitchel Parkway S",
+    "city": "College Station",
+    "state": "TX",
+    "zip": "77840",
+    "linkedin": "",
+    "github": "",
+    "website": ""
+  },
+  "education": {
+    "school": "Texas A&M University",
+    "degree": "Bachelor of Science in Engineering",
+    "major": "Engineering",
+    "gpa": "",
+    "graduation_year": "2029",
+    "location": "College Station, TX",
+    "in_progress": true
+  },
+  "skills": [
+    "Python",
+    "AutoCAD",
+    "Machine Learning",
+    "AI/ML",
+    "Adaptive Aerodynamics",
+    "Robotics",
+    "Leadership",
+    "Analytical Thinking",
+    "Team Collaboration"
+  ],
+  "experience": [],
+  "interests": [
+    "AI",
+    "Machine Learning",
+    "Adaptive Aerodynamics",
+    "Robotics",
+    "Computational Systems"
+  ],
+  "internship_search": {
+    "job_titles": [
+      "Engineering Intern",
+      "Software Engineering Intern",
+      "Mechanical Engineering Intern",
+      "AI/ML Intern",
+      "Robotics Intern",
+      "Aerospace Engineering Intern",
+      "Computer Science Intern",
+      "Research Engineering Intern"
+    ],
+    "locations": ["Texas", "Remote", "Houston TX", "Dallas TX", "Austin TX"],
+    "date_range": "July 2025 - August 2025",
+    "internship_months": ["July", "August"],
+    "internship_year": "2025"
+  }
+}

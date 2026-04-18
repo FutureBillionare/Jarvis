@@ -85,6 +85,13 @@ TOOL_GROUPS: dict[str, list[str]] = {
     "eonet": [
         "eonet_events", "eonet_event_detail", "eonet_categories",
     ],
+    "google": [
+        "google_auth",
+        "gmail_send", "gmail_read", "gmail_get_message",
+        "gdrive_list", "gdrive_upload", "gdrive_share",
+        "gcal_list", "gcal_create", "gcal_delete",
+        "search_console", "analytics",
+    ],
 }
 
 # Tool name → group membership index for fast lookup

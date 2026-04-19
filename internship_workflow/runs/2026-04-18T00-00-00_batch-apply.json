@@ -1,0 +1,22 @@
+{
+  "runId": "2026-04-18T00-00-00_batch-apply",
+  "query": "batch-apply from internships_found.json",
+  "config": {
+    "minMatchScore": 5,
+    "maxApplications": 108,
+    "source": "apply-batch"
+  },
+  "status": "in_progress",
+  "startedAt": "2026-04-18T00:00:00.000Z",
+  "updatedAt": "2026-04-18T00:00:00.000Z",
+  "completedAt": null,
+  "jobs": [],
+  "summary": {
+    "totalFound": 108,
+    "qualified": 0,
+    "applied": 0,
+    "failed": 0,
+    "skipped": 0,
+    "remaining": 108
+  }
+}

@@ -1,0 +1,499 @@
+15:17:09  Loaded 108 total | 101 qualified + not-yet-applied
+15:17:10  file_cache is only supported with oauth2client<4.0.0
+15:17:10  Google Sheets connected.
+15:17:10  Logging into LinkedIn...
+15:17:20  LinkedIn login done. URL: https://www.linkedin.com/feed/
+15:17:20  [1/101] [LINKEDIN] Software Engineering Intern (Full Stack) @ Hue.
+15:17:34    -> Failed
+15:17:34  Refreshing credentials due to a 401 response. Attempt 1/2.
+15:17:38  [2/101] [LINKEDIN] Software Engineer, AI Platform - Intern @ Nuro
+15:18:17    -> Applied
+15:18:20  [3/101] [LINKEDIN] Mechanical Engineering Intern @ Persona AI
+15:18:59    -> Applied
+15:19:02  [4/101] [LINKEDIN] Mechanical Engineering Intern - Summer 2026 @ ERock
+15:20:08  External ATS error: Locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("button[type='submit'], input[type='submit'], button:has-text('Submit'), button:has-text('Apply')").first
+    - locator resolved to <button id="filter-apply-handler">Apply</button>
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is not visible
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is not visible
+    - retrying click action
+      - waiting 100ms
+    57 × waiting for element to be visible, enabled and stable
+       - element is not visible
+     - retrying click action
+       - waiting 500ms
+
+15:20:08    -> Failed
+15:20:11  [5/101] [LINKEDIN] Mechanical Engineering Intern - Buildings (Summer 2026) @ Stantec
+15:20:51    -> Applied
+15:20:54  [6/101] [LINKEDIN] Software Engineer Intern @ Brinks Home
+15:21:09    -> Failed
+15:21:12  [7/101] [LINKEDIN] Software Engineering Intern @ Texas Instruments
+15:22:21  External ATS error: Locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("button[type='submit'], input[type='submit'], button:has-text('Submit'), button:has-text('Apply')").first
+    - locator resolved to <button class="button apply-now-button theme-color-1 apply-now-button--apply-now" data-bind="click: click, enable: isEnable,↵        class: buttonStatusClass">…</button>
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - <div class="privacy_prompt_content">…</div> from <div id="__tealiumGDPRecModal">…</div> subtree intercepts pointer events
+    - retrying click action
+    - waiting 20ms
+    - waiting for element to be visible, enabled and stable
+    - element is visible, enabled and stable
+    - scrolling into view if needed
+    - done scrolling
+    - <div class="privacy_prompt_content">…</div> from <div id="__tealiumGDPRecModal">…</div> subtree intercepts pointer events
+  2 × retrying click action
+      - waiting 100ms
+      - waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - <div class="privacy_prompt_middle">…</div> from <div id="__tealiumGDPRecModal">…</div> subtree intercepts pointer events
+  13 × retrying click action
+       - waiting 500ms
+       - waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - <div class="privacy_prompt_content">…</div> from <div id="__tealiumGDPRecModal">…</div> subtree intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+       - waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - <div class="privacy_prompt_content">…</div> from <div id="__tealiumGDPRecModal">…</div> subtree intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+       - waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - <div class="privacy_prompt_middle">…</div> from <div id="__tealiumGDPRecModal">…</div> subtree intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+       - waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - <div class="privacy_prompt_middle">…</div> from <div id="__tealiumGDPRecModal">…</div> subtree intercepts pointer events
+  2 × retrying click action
+      - waiting 500ms
+      - waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - <div class="privacy_prompt_content">…</div> from <div id="__tealiumGDPRecModal">…</div> subtree intercepts pointer events
+  - retrying click action
+    - waiting 500ms
+    - waiting for element to be visible, enabled and stable
+    - element is visible, enabled and stable
+    - scrolling into view if needed
+    - done scrolling
+    - <div class="privacy_prompt_middle">…</div> from <div id="__tealiumGDPRecModal">…</div> subtree intercepts pointer events
+  - retrying click action
+    - waiting 500ms
+
+15:22:21    -> Failed
+15:22:24  [8/101] [LINKEDIN] Software Engineering Intern @ Persona AI
+15:23:02    -> Applied
+15:23:06  [9/101] [LINKEDIN] Engineering Internships - Winter/Spring 2026 @ The Boring Company
+15:23:46    -> Applied
+15:23:50  [10/101] [LINKEDIN] Software Engineering Intern @ Spectral AI
+15:24:29    -> Applied
+15:24:32  [11/101] [LINKEDIN] Engineering Internships - Winter/Spring 2026 @ The Boring Company
+15:25:12    -> Applied
+15:25:15  [12/101] [LINKEDIN] Intern, Engineer Trainee @ AG&E
+15:25:29    -> Failed
+15:25:32  [13/101] [LINKEDIN] Mechanical Engineering Intern - Airflow & CFD @ EOS
+15:25:54    -> Failed
+15:25:57  [14/101] [LINKEDIN] Software Engineer Intern (Fall 2025/Summer 2026) @ Reacher
+15:26:34    -> Failed
+15:26:37  [15/101] [LINKEDIN] IT Intern - AI/ML @ Bio-Rad Laboratories
+15:28:14  External ATS error: Locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("button[type='submit'], input[type='submit'], button:has-text('Submit'), button:has-text('Apply')").first
+    - locator resolved to <button name="button" type="submit" class="btn btn-primary" id="search_control_button_1_0">Search</button>
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - <div tabindex="-1" role="dialog" aria-modal="true" aria-label="Cookie consent" class="consent-modal modal show" data-modal-static-backdrop="true" aria-describedby="cookie_consent_description" data-controller="init--explicit-consent-modal" data-init--explicit-consent-modal-expires-value="12" data-init--explicit-consent-modal-consent-strategy-value="explicit_consent">…</div> intercepts pointer events
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - <div tabindex="-1" role="dialog" aria-modal="true" aria-label="Cookie consent" class="consent-modal modal show" data-modal-static-backdrop="true" aria-describedby="cookie_consent_description" data-controller="init--explicit-consent-modal" data-init--explicit-consent-modal-expires-value="12" data-init--explicit-consent-modal-consent-strategy-value="explicit_consent">…</div> intercepts pointer events
+    - retrying click action
+      - waiting 100ms
+    57 × waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - <div tabindex="-1" role="dialog" aria-modal="true" aria-label="Cookie consent" class="consent-modal modal show" data-modal-static-backdrop="true" aria-describedby="cookie_consent_description" data-controller="init--explicit-consent-modal" data-init--explicit-consent-modal-expires-value="12" data-init--explicit-consent-modal-consent-strategy-value="explicit_consent">…</div> intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+
+15:28:14    -> Failed
+15:28:17  [16/101] [LINKEDIN] IT Intern - AI/ML @ Bio-Rad Laboratories
+15:29:53  External ATS error: Locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("button[type='submit'], input[type='submit'], button:has-text('Submit'), button:has-text('Apply')").first
+    - locator resolved to <button name="button" type="submit" class="btn btn-primary" id="search_control_button_1_0">Search</button>
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - <div tabindex="-1" role="dialog" aria-modal="true" aria-label="Cookie consent" class="consent-modal modal show" data-modal-static-backdrop="true" aria-describedby="cookie_consent_description" data-controller="init--explicit-consent-modal" data-init--explicit-consent-modal-expires-value="12" data-init--explicit-consent-modal-consent-strategy-value="explicit_consent">…</div> intercepts pointer events
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - <div tabindex="-1" role="dialog" aria-modal="true" aria-label="Cookie consent" class="consent-modal modal show" data-modal-static-backdrop="true" aria-describedby="cookie_consent_description" data-controller="init--explicit-consent-modal" data-init--explicit-consent-modal-expires-value="12" data-init--explicit-consent-modal-consent-strategy-valu15:29:57    -> Failed
+15:30:00  [98/101] [LINKEDIN] V - Commercial Intern @ PROENERGY
+15:30:14    -> Failed
+15:30:17  [99/101] [LINKEDIN] STAR Uzun Dönem Staj Programı (İstanbul) @ Karsan Automotive
+15:30:31    -> Failed
+15:30:34  [100/101] [LINKEDIN] STAR Uzun Dönem Staj Programı (Bursa) @ Karsan Automotive
+15:30:48    -> Failed
+15:30:51  [101/101] [LINKEDIN] Indonesia Intern @ Halliburton
+15:31:06    -> Failed
+15:31:09  
+=== FINAL RESULTS ===
+15:31:09    Applied:  0
+15:31:09    Failed:   101
+15:31:09    Skipped:  0
+init--explicit-consent-modal-expires-value="12" data-init--explicit-consent-modal-consent-strategy-value="explicit_consent">…</div> intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+
+15:29:53    -> Failed
+15:29:56  [17/101] [LINKEDIN] Software Engineer Intern (Fall 2025/Summer 2026) @ Reacher
+15:30:32    -> Failed
+15:30:35  [18/101] [LINKEDIN] Software Engineer Intern, BCI Applications @ Neuralink
+15:30:49    -> Failed
+15:30:53  [19/101] [LINKEDIN] SAP iXp Intern - AI Machine Learning @ SAP
+15:31:07    -> Failed
+15:31:10  [20/101] [LINKEDIN] Sensor Hardware Development Intern @ Osmo
+15:31:23    -> Failed
+15:31:26  [21/101] [LINKEDIN] AI & ML Engineering Intern @ Dunedain
+15:31:48    -> Failed
+15:31:51  [22/101] [LINKEDIN] AI & ML Engineering Intern @ Zello
+15:32:30    -> Applied
+15:32:33  [23/101] [LINKEDIN] ML/NLP Research Engineering Intern @ Dunedain
+15:32:55    -> Failed
+15:32:59  [24/101] [LINKEDIN] Crew Systems Engineering Intern- Software @ The Exploration Company
+15:33:13    -> Failed
+15:33:16  [25/101] [LINKEDIN] Mechanical Engineering Intern, Brain Interfaces @ Neuralink
+15:33:29    -> Failed
+15:33:33  [26/101] [LINKEDIN] Mechanical Engineering-INTERN (Summer 2026) @ SI Group
+15:34:12    -> Applied
+15:34:15  [27/101] [LINKEDIN] Engineering Internships - Summer 2026 @ The Boring Company
+15:34:28    -> Failed
+15:34:31  [28/101] [LINKEDIN] Engineering Internships - Summer 2026 @ The Boring Company
+15:35:11    -> Applied
+15:35:14  [29/101] [LINKEDIN] Software Developer Intern @ Octave
+15:35:28    -> Failed
+15:35:31  [30/101] [LINKEDIN] Software Engineer Intern @ Octave
+15:35:45    -> Failed
+15:35:48  [31/101] [LINKEDIN] Software Engineer - Intern @ GreenGas USA
+15:36:26    -> Applied
+15:36:29  [32/101] [LINKEDIN] Software Developer Intern - Structural @ Walter P Moore
+15:37:04    -> Failed
+15:37:08  [33/101] [LINKEDIN] Teleoperation Software Engineering Internship @ Persona AI
+15:37:46    -> Applied
+15:37:49  [34/101] [LINKEDIN] Software & DevOps Intern - Summer 2026 @ ERock
+15:38:54  External ATS error: Locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("button[type='submit'], input[type='submit'], button:has-text('Submit'), button:has-text('Apply')").first
+    - locator resolved to <button id="filter-apply-handler">Apply</button>
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is not visible
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is not visible
+    - retrying click action
+      - waiting 100ms
+    58 × waiting for element to be visible, enabled and stable
+       - element is not visible
+     - retrying click action
+       - waiting 500ms
+
+15:38:54    -> Failed
+15:38:57  [35/101] [LINKEDIN] Software Developer - Intern P/T @ Elliott Electric Supply
+15:39:35    -> Applied
+15:39:39  [36/101] [LINKEDIN] Software Developer Intern - Structural @ Walter P Moore
+15:40:13    -> Failed
+15:40:16  [37/101] [LINKEDIN] Software Developer Intern - Structural @ Walter P Moore
+15:40:51    -> Failed
+15:40:54  [38/101] [LINKEDIN] Software Engineer Intern - zdSCADA @ Quorum Software
+15:41:31    -> Failed
+15:41:34  [39/101] [LINKEDIN] Software Development in Test Intern @ Dematic
+15:42:19    -> Failed
+15:42:22  [40/101] [LINKEDIN] Software Developer Intern - Structural @ Walter P Moore
+15:42:57    -> Failed
+15:43:00  [41/101] [LINKEDIN] Software Engineer Intern, Monitoring @ Smart Data Solutions
+15:43:39    -> Applied
+15:43:42  [42/101] [LINKEDIN] Software Engineer, Intern @ Stripe
+15:43:45    -> Failed
+15:43:48  [43/101] [LINKEDIN] Software Engineering Intern @ TraceRoot.AI (YC S25)
+15:44:24    -> Failed
+15:44:27  [44/101] [LINKEDIN] Intern - Project Engineer @ Southland Industries
+15:44:40    -> Failed
+15:44:43  [45/101] [LINKEDIN] V -Industrial Engineering Intern @ PROENERGY
+15:45:51  External ATS error: Locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("button[type='submit'], input[type='submit'], button:has-text('Submit'), button:has-text('Apply')").first
+    - locator resolved to <button type="submit" aria-label="Search" class="e-search-submit elementor-screen-only ">↵⇆⇆⇆⇆⇆↵⇆⇆⇆⇆⇆⇆⇆⇆⇆</button>
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is not visible
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is not visible
+    - retrying click action
+      - waiting 100ms
+    58 × waiting for element to be visible, enabled and stable
+       - element is not visible
+     - retrying click action
+       - waiting 500ms
+
+15:45:51    -> Failed
+15:45:54  [46/101] [LINKEDIN] Crew Systems Engineering Intern, Human Factors @ The Exploration Company
+15:46:32    -> Applied
+15:46:35  [47/101] [LINKEDIN] On-Site Application Engineer COOP @ Flowserve Corporation
+15:47:10    -> Failed
+15:47:14  [48/101] [LINKEDIN] Production Engineering Intern @ MSI Express
+15:47:36    -> Failed
+15:47:39  [49/101] [LINKEDIN] Intern - Engineering @ Epiroc
+15:47:52    -> Failed
+15:47:56  [50/101] [LINKEDIN] Intern, Engineering @ Pulice
+15:48:31    -> Failed
+15:48:34  [51/101] [LINKEDIN] Intern, Engineering @ Pulice
+15:49:09    -> Failed
+15:49:12  [52/101] [LINKEDIN] Intern, Engineering @ Pulice
+15:49:46    -> Failed
+15:49:49  [53/101] [LINKEDIN] Civil Engineering Intern @ Walter P Moore
+15:50:24    -> Failed
+15:50:28  [54/101] [LINKEDIN] ENGINEER INTERN @ Wells
+15:51:05    -> Applied
+15:51:09  [55/101] [LINKEDIN] Electrical Engineering Intern @ Sungrow
+15:51:23    -> Failed
+15:51:26  [56/101] [LINKEDIN] Electrical Engineering Intern @ Persona AI
+15:51:40    -> Failed
+15:51:43  [57/101] [LINKEDIN] Electrical Engineering Intern - Summer 2026 @ ERock
+15:52:48  External ATS error: Locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("button[type='submit'], input[type='submit'], button:has-text('Submit'), button:has-text('Apply')").first
+    - locator resolved to <button id="filter-apply-handler">Apply</button>
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is not visible
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is not visible
+    - retrying click action
+      - waiting 100ms
+    58 × waiting for element to be visible, enabled and stable
+       - element is not visible
+     - retrying click action
+       - waiting 500ms
+
+15:52:48    -> Failed
+15:52:51  [58/101] [LINKEDIN] BAS Graphics Engineer - Internship @ Hunton Group
+15:53:05    -> Failed
+15:53:08  [59/101] [LINKEDIN] Engineering Intern (Recent Graduate Students) @ MillenniumSoft Inc
+15:53:44    -> Failed
+15:53:47  [60/101] [LINKEDIN] Intern - Project Engineer @ Southland Industries
+15:54:01    -> Failed
+15:54:05  [61/101] [LINKEDIN] Fire Protection Engineering Intern - Buildings (Summer 2026) @ Stantec
+15:54:43    -> Applied
+15:54:47  [62/101] [LINKEDIN] Software Engineering Intern @ Unbound
+15:55:23    -> Failed
+15:55:26  [63/101] [LINKEDIN] Software Engineer Intern @ Laserfiche
+15:56:01    -> Failed
+15:56:05  [64/101] [LINKEDIN] Software Engineer Intern @ Ironclad
+15:56:43    -> Applied
+15:56:47  [65/101] [LINKEDIN] Software Engineering Intern @ Flock
+15:57:25    -> Applied
+15:57:28  [66/101] [LINKEDIN] Software Engineering Intern @ Arboreal Management
+15:58:37    -> Applied
+15:58:40  [67/101] [LINKEDIN] Engineering Trainee - Thermofluids @ Mercedes AMG High Performance Powertrains
+15:59:16    -> Failed
+15:59:20  [68/101] [LINKEDIN] Software Engineering Intern @ Structured AI
+15:59:22    -> Failed
+15:59:25  [69/101] [LINKEDIN] Software Engineer Intern @ Culture Biosciences
+16:00:04    -> Applied
+16:00:07  [70/101] [LINKEDIN] Software Engineer Intern @ Cantaloupe Inc
+16:00:46    -> Applied
+16:00:49  [71/101] [LINKEDIN] Internship | Development study for ICE Powertrains @ TNO
+16:01:03    -> Failed
+16:01:06  [72/101] [LINKEDIN] Intern @ McMillan James Equipment Company
+16:01:20    -> Failed
+16:01:23  [73/101] [LINKEDIN] SAP iXp Intern - AI Machine Learning @ ChatGPT Jobs
+16:01:37    -> Failed
+16:01:40  [74/101] [LINKEDIN] Software Development (AI/ML) Intern @ University of Michigan
+16:02:15    -> Failed
+16:02:18  [75/101] [LINKEDIN] Intern - Software Engineer (Product Architecture) @ Akamai Technologies
+16:02:59    -> Applied
+16:03:02  [76/101] [LINKEDIN] Mechanical Engineering Intern @ Boston Dynamics
+16:03:46    -> Failed
+16:03:49  [77/101] [LINKEDIN] Mechanical Engineering Intern @ Dusty Robotics
+16:04:26    -> Failed
+16:04:30  [78/101] [LINKEDIN] Mechanical Engineering Intern — R&D @ Addium
+16:04:43    -> Failed
+16:04:46  [79/101] [LINKEDIN] Engineering Intern (Mechanical) @ Hanwha Ocean
+16:05:00    -> Failed
+16:05:03  [80/101] [LINKEDIN] Mechanical Engineering Intern @ Okuma America Corporation
+16:05:43    -> Applied
+16:05:47  [81/101] [LINKEDIN] Information Technology Summer Intern @ Surge Energy America
+16:06:08    -> Failed
+16:06:11  [82/101] [LINKEDIN] Diagnostics Intern @ Walter P Moore
+16:06:47    -> Failed
+16:06:50  [83/101] [LINKEDIN] Intern @ BioUrja Group
+16:07:03    -> Failed
+16:07:06  [84/101] [LINKEDIN] Lab Intern - Metals @ EOS
+16:07:28    -> Failed
+16:07:31  [85/101] [LINKEDIN] Internship - Applied Materials - Summer 2026 @ Firefly Aerospace
+16:08:08    -> Applied
+16:08:12  [86/101] [LINKEDIN] Software Engineer Intern (Fall 2026) @ Notion
+16:08:25    -> Failed
+16:08:28  [87/101] [LINKEDIN] Software Engineer, Intern @ Authentic
+16:09:08    -> Applied
+16:09:11  [88/101] [LINKEDIN] Software Developer Intern @ Octave
+16:09:24    -> Failed
+16:09:27  [89/101] [LINKEDIN] Software Engineer Intern @ Octave
+16:09:41    -> Failed
+16:09:44  [90/101] [LINKEDIN] Frontend Software Engineer, Intern @ Machina Labs
+16:10:50  External ATS error: Locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("button[type='submit'], input[type='submit'], button:has-text('Submit'), button:has-text('Apply')").first
+    - locator resolved to <button type="submit" class="hidden" id="hcaptchaSubmitBtn"></button>
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is not visible
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is not visible
+    - retrying click action
+      - waiting 100ms
+    57 × waiting for element to be visible, enabled and stable
+       - element is not visible
+     - retrying click action
+       - waiting 500ms
+
+16:10:50    -> Failed
+16:10:53  [91/101] [LINKEDIN] Software Engineer Intern (Spring/Summer 2026) @ Cohere
+16:11:31    -> Applied
+16:11:34  [92/101] [LINKEDIN] Software Developer Internship @ Mercedes-Benz Research & Development North America, Inc.
+16:12:47  External ATS error: Locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("button[type='submit'], input[type='submit'], button:has-text('Submit'), button:has-text('Apply')").first
+    - locator resolved to <button type="submit" class="hidden" id="hcaptchaSubmitBtn"></button>
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is not visible
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is not visible
+    - retrying click action
+      - waiting 100ms
+    58 × waiting for element to be visible, enabled and stable
+       - element is not visible
+     - retrying click action
+       - waiting 500ms
+
+16:12:47    -> Failed
+16:12:50  [93/101] [LINKEDIN] Computational Biology Intern - Summer 2026 @ Novaflow (YC S25)
+16:13:26    -> Failed
+16:13:29  [94/101] [LINKEDIN] Engineering Intern @ Regal Holdings
+16:14:35  External ATS error: Locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("button[type='submit'], input[type='submit'], button:has-text('Submit'), button:has-text('Apply')").first
+    - locator resolved to <button id="filter-apply-handler">Apply</button>
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is not visible
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is not visible
+    - retrying click action
+      - waiting 100ms
+    57 × waiting for element to be visible, enabled and stable
+       - element is not visible
+     - retrying click action
+       - waiting 500ms
+
+16:14:35    -> Failed
+16:14:38  [95/101] [LINKEDIN] Research & Development Engineering Intern @ VERO Biotech
+16:15:17    -> Applied
+16:15:20  [96/101] [LINKEDIN] R&D Engineering Intern @ B. Braun Medical Inc. (US)
+16:15:33    -> Failed
+16:15:36  [97/101] [LINKEDIN] Production Engineering Intern @ MSI Express
+16:15:58    -> Failed
+16:16:01  [98/101] [LINKEDIN] V - Commercial Intern @ PROENERGY
+16:16:15    -> Failed
+16:16:18  [99/101] [LINKEDIN] STAR Uzun Dönem Staj Programı (İstanbul) @ Karsan Automotive
+16:16:32    -> Failed
+16:16:35  [100/101] [LINKEDIN] STAR Uzun Dönem Staj Programı (Bursa) @ Karsan Automotive
+16:16:49    -> Failed
+16:16:52  [101/101] [LINKEDIN] Indonesia Intern @ Halliburton
+16:17:06    -> Failed
+16:17:10  
+=== FINAL RESULTS ===
+16:17:10    Applied:  28
+16:17:10    Failed:   73
+16:17:10    Skipped:  0
+16:17:10  
+  Successfully applied to:
+16:17:10      + Software Engineer, AI Platform - Intern @ Nuro
+16:17:10      + Mechanical Engineering Intern @ Persona AI
+16:17:10      + Mechanical Engineering Intern - Buildings (Summer 2026) @ Stantec
+16:17:10      + Software Engineering Intern @ Persona AI
+16:17:10      + Engineering Internships - Winter/Spring 2026 @ The Boring Company
+16:17:10      + Software Engineering Intern @ Spectral AI
+16:17:10      + Engineering Internships - Winter/Spring 2026 @ The Boring Company
+16:17:10      + AI & ML Engineering Intern @ Zello
+16:17:10      + Mechanical Engineering-INTERN (Summer 2026) @ SI Group
+16:17:10      + Engineering Internships - Summer 2026 @ The Boring Company
+16:17:10      + Software Engineer - Intern @ GreenGas USA
+16:17:10      + Teleoperation Software Engineering Internship @ Persona AI
+16:17:10      + Software Developer - Intern P/T @ Elliott Electric Supply
+16:17:10      + Software Engineer Intern, Monitoring @ Smart Data Solutions
+16:17:10      + Crew Systems Engineering Intern, Human Factors @ The Exploration Company
+16:17:10      + ENGINEER INTERN @ Wells
+16:17:10      + Fire Protection Engineering Intern - Buildings (Summer 2026) @ Stantec
+16:17:10      + Software Engineer Intern @ Ironclad
+16:17:10      + Software Engineering Intern @ Flock
+16:17:10      + Software Engineering Intern @ Arboreal Management
+16:17:10      + Software Engineer Intern @ Culture Biosciences
+16:17:10      + Software Engineer Intern @ Cantaloupe Inc
+16:17:10      + Intern - Software Engineer (Product Architecture) @ Akamai Technologies
+16:17:10      + Mechanical Engineering Intern @ Okuma America Corporation
+16:17:10      + Internship - Applied Materials - Summer 2026 @ Firefly Aerospace
+16:17:10      + Software Engineer, Intern @ Authentic
+16:17:10      + Software Engineer Intern (Spring/Summer 2026) @ Cohere
+16:17:10      + Research & Development Engineering Intern @ VERO Biotech

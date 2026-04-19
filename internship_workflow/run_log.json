@@ -1,0 +1,22 @@
+{
+  "runs": [
+    {
+      "started_at": "2026-04-18T13:28:21.463115",
+      "finished_at": "2026-04-18T13:30:38.910024",
+      "found_count": 108,
+      "new_count": 108,
+      "applied_count": 0,
+      "applied_listings": [],
+      "error": "'charmap' codec can't encode character '\\u2717' in position 13: character maps to <undefined>"
+    },
+    {
+      "started_at": "2026-04-18T13:30:54.095730",
+      "finished_at": "2026-04-18T13:47:53.908038",
+      "found_count": 108,
+      "new_count": 108,
+      "applied_count": 0,
+      "applied_listings": [],
+      "error": null
+    }
+  ]
+}

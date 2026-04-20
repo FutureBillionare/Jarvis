@@ -1,0 +1,22 @@
+{
+  "runId": "2026-04-19T23-39-21_batch-apply",
+  "query": "batch-apply from internships_found.json (failed LinkedIn jobs)",
+  "config": {
+    "minMatchScore": 5,
+    "maxApplications": 73,
+    "source": "apply-batch"
+  },
+  "status": "in_progress",
+  "startedAt": "2026-04-19T23:39:21.526994",
+  "updatedAt": "2026-04-19T23:39:21.527000",
+  "completedAt": null,
+  "jobs": [],
+  "summary": {
+    "totalFound": 73,
+    "qualified": 0,
+    "applied": 0,
+    "failed": 0,
+    "skipped": 0,
+    "remaining": 73
+  }
+}

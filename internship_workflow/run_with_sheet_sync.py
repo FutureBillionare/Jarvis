@@ -421,6 +421,21 @@ async def _apply_linkedin(page, listing):
                 dummy = {"url": href, "title": listing["title"], "company": listing["company"]}
                 return await _workday_create_account_and_apply(page.context, dummy)
 
+            # Dismiss cookie/GDPR consent modals before interacting
+            try:
+                consent_btn = ext_page.locator(
+                    "button:has-text('Accept'), button:has-text('Accept All'), "
+                    "button:has-text('I Accept'), button:has-text('Agree'), "
+                    "button:has-text('OK'), button:has-text('Close'), "
+                    "button[aria-label*='consent' i], button[aria-label*='cookie' i], "
+                    "[id*='consent'] button, [class*='consent'] button"
+                ).first
+                if await consent_btn.count():
+                    await consent_btn.click()
+                    await ext_page.wait_for_timeout(1000)
+            except Exception:
+                pass
+
             await _fill_common(ext_page)
             await _upload_resume(ext_page)
             try:
@@ -430,10 +445,21 @@ async def _apply_linkedin(page, listing):
                 )
             except Exception:
                 pass
+            # Use explicit apply/submit keywords, exclude search buttons
             submit = ext_page.locator(
-                "button[type='submit'], input[type='submit'], "
-                "button:has-text('Submit'), button:has-text('Apply')"
+                "button:has-text('Submit Application'), "
+                "button:has-text('Apply Now'), "
+                "button:has-text('Submit'), "
+                "input[type='submit'][value*='Apply' i], "
+                "input[type='submit'][value*='Submit' i], "
+                "button[type='submit']:has-text('Apply')"
             ).first
+            if not await submit.count():
+                # Fallback: any submit that isn't a search button
+                submit = ext_page.locator(
+                    "button[type='submit']:not([aria-label*='search' i]):not(:has-text('Search')), "
+                    "input[type='submit']:not([value*='Search' i])"
+                ).first
             if await submit.count():
                 await submit.click()
                 await ext_page.wait_for_timeout(3000)

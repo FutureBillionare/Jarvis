@@ -23,8 +23,8 @@ TELEGRAM_BOT_TOKEN        = os.getenv("TELEGRAM_BOT_TOKEN", "")          # BotFa
 TELEGRAM_CHAT_ID          = os.getenv("TELEGRAM_CHAT_ID", "")            # Your chat ID
 
 # ─── STRATEGY SETTINGS ───────────────────────────────────────
-MIN_SPREAD                = 0.05     # Minimum gross spread to consider (5%)
-TARGET_SPREAD             = 0.06     # Ideal spread to enter (6%)
+MIN_SPREAD                = 0.20     # Minimum gross spread to consider (20%)
+TARGET_SPREAD             = 0.22     # Ideal spread to enter (22%)
 MIN_LIQUIDITY_USD         = 500      # Min $ liquidity on each side
 MAX_POSITION_USD          = 500      # Max $ per leg per trade
 MAX_OPEN_POSITIONS        = 10       # Max simultaneous open trades

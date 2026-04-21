@@ -1,0 +1,487 @@
+{
+  "runId": "2026-04-21T14-00-00_batch-apply",
+  "query": "batch-apply from internships_found.json (retry failed)",
+  "config": {
+    "minMatchScore": 5,
+    "maxApplications": 73,
+    "source": "apply-batch"
+  },
+  "status": "in_progress",
+  "startedAt": "2026-04-21T14:00:00",
+  "updatedAt": "2026-04-21T14:00:00",
+  "completedAt": null,
+  "jobs": [
+    {
+      "id": "7316506393b4",
+      "title": "Software Engineering Intern (Full Stack)",
+      "company": "Hue.",
+      "url": "https://www.linkedin.com/jobs/view/software-engineering-intern-full-stack-at-hue-4383055507",
+      "score": 10,
+      "status": "pending"
+    },
+    {
+      "id": "6d737415d22f",
+      "title": "Mechanical Engineering Intern - Summer 2026",
+      "company": "ERock",
+      "url": "https://www.linkedin.com/jobs/view/mechanical-engineering-intern-summer-2026-at-erock-4366536408",
+      "score": 10,
+      "status": "pending"
+    },
+    {
+      "id": "93e51a551765",
+      "title": "Software Engineer Intern",
+      "company": "Brinks Home",
+      "url": "https://www.linkedin.com/jobs/view/software-engineer-intern-at-brinks-home-4366583412",
+      "score": 10,
+      "status": "pending"
+    },
+    {
+      "id": "9e5336ff279f",
+      "title": "Software Engineering Intern",
+      "company": "Texas Instruments",
+      "url": "https://www.linkedin.com/jobs/view/software-engineering-intern-at-texas-instruments-4399683909",
+      "score": 10,
+      "status": "pending"
+    },
+    {
+      "id": "7d75fd9a92ec",
+      "title": "Mechanical Engineering Intern - Airflow & CFD",
+      "company": "EOS",
+      "url": "https://www.linkedin.com/jobs/view/mechanical-engineering-intern-airflow-cfd-at-eos-4389243585",
+      "score": 10,
+      "status": "pending"
+    },
+    {
+      "id": "4c333aaa7b4c",
+      "title": "Software Engineer Intern (Fall 2025/Summer 2026)",
+      "company": "Reacher",
+      "url": "https://www.linkedin.com/jobs/view/software-engineer-intern-fall-2025-summer-2026-at-reacher-4290119965",
+      "score": 10,
+      "status": "pending"
+    },
+    {
+      "id": "eb4b6963af11",
+      "title": "IT Intern - AI/ML",
+      "company": "Bio-Rad Laboratories",
+      "url": "https://www.linkedin.com/jobs/view/it-intern-ai-ml-at-bio-rad-laboratories-4378130651",
+      "score": 10,
+      "status": "pending"
+    },
+    {
+      "id": "1370b9fd3cdc",
+      "title": "Software Engineer Intern (Fall 2025/Summer 2026)",
+      "company": "Reacher",
+      "url": "https://www.linkedin.com/jobs/view/software-engineer-intern-fall-2025-summer-2026-at-reacher-4290120711",
+      "score": 10,
+      "status": "pending"
+    },
+    {
+      "id": "333ddabe5fba",
+      "title": "Software Engineer Intern, BCI Applications",
+      "company": "Neuralink",
+      "url": "https://www.linkedin.com/jobs/view/software-engineer-intern-bci-applications-at-neuralink-4238849288",
+      "score": 10,
+      "status": "pending"
+    },
+    {
+      "id": "ca80c060bc41",
+      "title": "SAP iXp Intern - AI Machine Learning",
+      "company": "SAP",
+      "url": "https://www.linkedin.com/jobs/view/sap-ixp-intern-ai-machine-learning-at-sap-4400782204",
+      "score": 10,
+      "status": "pending"
+    },
+    {
+      "id": "35c6cf0dabb1",
+      "title": "AI & ML Engineering Intern",
+      "company": "Dunedain",
+      "url": "https://www.linkedin.com/jobs/view/ai-ml-engineering-intern-at-dunedain-4394270667",
+      "score": 10,
+      "status": "pending"
+    },
+    {
+      "id": "831b31ace3f0",
+      "title": "ML/NLP Research Engineering Intern",
+      "company": "Dunedain",
+      "url": "https://www.linkedin.com/jobs/view/ml-nlp-research-engineering-intern-at-dunedain-4394267754",
+      "score": 10,
+      "status": "pending"
+    },
+    {
+      "id": "1067572f7dec",
+      "title": "Engineering Internships - Summer 2026",
+      "company": "The Boring Company",
+      "url": "https://www.linkedin.com/jobs/view/engineering-internships-summer-2026-at-the-boring-company-4296186675",
+      "score": 10,
+      "status": "pending"
+    },
+    {
+      "id": "19b275ed53a5",
+      "title": "Software Developer Intern",
+      "company": "Octave",
+      "url": "https://www.linkedin.com/jobs/view/software-developer-intern-at-octave-4386828685",
+      "score": 10,
+      "status": "pending"
+    },
+    {
+      "id": "09028949a193",
+      "title": "Software Engineer Intern",
+      "company": "Octave",
+      "url": "https://www.linkedin.com/jobs/view/software-engineer-intern-at-octave-4386837390",
+      "score": 10,
+      "status": "pending"
+    },
+    {
+      "id": "224e7f75c274",
+      "title": "Software & DevOps Intern - Summer 2026",
+      "company": "ERock",
+      "url": "https://www.linkedin.com/jobs/view/software-devops-intern-summer-2026-at-erock-4366576793",
+      "score": 10,
+      "status": "pending"
+    },
+    {
+      "id": "d6125101f5ef",
+      "title": "Software Engineer Intern - zdSCADA",
+      "company": "Quorum Software",
+      "url": "https://www.linkedin.com/jobs/view/software-engineer-intern-zdscada-at-quorum-software-4388873649",
+      "score": 10,
+      "status": "pending"
+    },
+    {
+      "id": "a40d5cd39d1f",
+      "title": "Software Development in Test Intern",
+      "company": "Dematic",
+      "url": "https://www.linkedin.com/jobs/view/software-development-in-test-intern-at-dematic-4400850217",
+      "score": 10,
+      "status": "pending"
+    },
+    {
+      "id": "8658d2165071",
+      "title": "Software Engineer, Intern",
+      "company": "Stripe",
+      "url": "https://uk.linkedin.com/jobs/view/software-engineer-intern-at-stripe-4403150824",
+      "score": 10,
+      "status": "pending"
+    },
+    {
+      "id": "3443c0994bec",
+      "title": "Software Engineering Intern",
+      "company": "TraceRoot.AI (YC S25)",
+      "url": "https://www.linkedin.com/jobs/view/software-engineering-intern-at-traceroot-ai-yc-s25-4324837393",
+      "score": 9,
+      "status": "pending"
+    },
+    {
+      "id": "0adf75cdc94a",
+      "title": "Intern - Project Engineer",
+      "company": "Southland Industries",
+      "url": "https://www.linkedin.com/jobs/view/intern-project-engineer-at-southland-industries-4269023519",
+      "score": 9,
+      "status": "pending"
+    },
+    {
+      "id": "4549dbc56ec5",
+      "title": "V -Industrial Engineering Intern",
+      "company": "PROENERGY",
+      "url": "https://www.linkedin.com/jobs/view/v-industrial-engineering-intern-at-proenergy-4382159017",
+      "score": 9,
+      "status": "pending"
+    },
+    {
+      "id": "d720ca49e4e5",
+      "title": "On-Site Application Engineer COOP",
+      "company": "Flowserve Corporation",
+      "url": "https://www.linkedin.com/jobs/view/on-site-application-engineer-coop-at-flowserve-corporation-4375469526",
+      "score": 9,
+      "status": "pending"
+    },
+    {
+      "id": "ce53f86ef686",
+      "title": "Production Engineering Intern",
+      "company": "MSI Express",
+      "url": "https://www.linkedin.com/jobs/view/production-engineering-intern-at-msi-express-4387708939",
+      "score": 9,
+      "status": "pending"
+    },
+    {
+      "id": "8a437cd45173",
+      "title": "Intern - Engineering",
+      "company": "Epiroc",
+      "url": "https://www.linkedin.com/jobs/view/intern-engineering-at-epiroc-4305099643",
+      "score": 9,
+      "status": "pending"
+    },
+    {
+      "id": "28ab4be96297",
+      "title": "Intern, Engineering",
+      "company": "Pulice",
+      "url": "https://www.linkedin.com/jobs/view/intern-engineering-at-pulice-4381934414",
+      "score": 9,
+      "status": "pending"
+    },
+    {
+      "id": "8c5186dfa4bb",
+      "title": "Intern, Engineering",
+      "company": "Pulice",
+      "url": "https://www.linkedin.com/jobs/view/intern-engineering-at-pulice-4383865662",
+      "score": 9,
+      "status": "pending"
+    },
+    {
+      "id": "118c887683ec",
+      "title": "Intern, Engineering",
+      "company": "Pulice",
+      "url": "https://www.linkedin.com/jobs/view/intern-engineering-at-pulice-4381932500",
+      "score": 9,
+      "status": "pending"
+    },
+    {
+      "id": "956a7a919f10",
+      "title": "Electrical Engineering Intern",
+      "company": "Sungrow",
+      "url": "https://www.linkedin.com/jobs/view/electrical-engineering-intern-at-sungrow-4391219775",
+      "score": 9,
+      "status": "pending"
+    },
+    {
+      "id": "ae9d828576b6",
+      "title": "Electrical Engineering Intern",
+      "company": "Persona AI",
+      "url": "https://www.linkedin.com/jobs/view/electrical-engineering-intern-at-persona-ai-4362586514",
+      "score": 9,
+      "status": "pending"
+    },
+    {
+      "id": "08639ed74689",
+      "title": "Electrical Engineering Intern - Summer 2026",
+      "company": "ERock",
+      "url": "https://www.linkedin.com/jobs/view/electrical-engineering-intern-summer-2026-at-erock-4366582406",
+      "score": 9,
+      "status": "pending"
+    },
+    {
+      "id": "7a4a1f0e6f99",
+      "title": "Engineering Intern (Recent Graduate Students)",
+      "company": "MillenniumSoft Inc",
+      "url": "https://www.linkedin.com/jobs/view/engineering-intern-recent-graduate-students-at-millenniumsoft-inc-4036742544",
+      "score": 9,
+      "status": "pending"
+    },
+    {
+      "id": "0b6d180db655",
+      "title": "Intern - Project Engineer",
+      "company": "Southland Industries",
+      "url": "https://www.linkedin.com/jobs/view/intern-project-engineer-at-southland-industries-4269025541",
+      "score": 9,
+      "status": "pending"
+    },
+    {
+      "id": "bcca323ee42d",
+      "title": "Software Engineering Intern",
+      "company": "Unbound",
+      "url": "https://www.linkedin.com/jobs/view/software-engineering-intern-at-unbound-4401814644",
+      "score": 8,
+      "status": "pending"
+    },
+    {
+      "id": "62a4e0d846a1",
+      "title": "Software Engineer Intern",
+      "company": "Laserfiche",
+      "url": "https://www.linkedin.com/jobs/view/software-engineer-intern-at-laserfiche-4309269785",
+      "score": 8,
+      "status": "pending"
+    },
+    {
+      "id": "5e37ddd9c552",
+      "title": "Engineering Trainee - Thermofluids",
+      "company": "Mercedes AMG High Performance Powertrains",
+      "url": "https://uk.linkedin.com/jobs/view/engineering-trainee-thermofluids-at-mercedes-amg-high-performance-powertrains-4398504860",
+      "score": 8,
+      "status": "pending"
+    },
+    {
+      "id": "7dd9ea9ac885",
+      "title": "Software Engineering Intern",
+      "company": "Structured AI",
+      "url": "https://www.linkedin.com/jobs/view/software-engineering-intern-at-structured-ai-4373060639",
+      "score": 8,
+      "status": "pending"
+    },
+    {
+      "id": "75d191d91a87",
+      "title": "Internship | Development study for ICE Powertrains",
+      "company": "TNO",
+      "url": "https://nl.linkedin.com/jobs/view/internship-development-study-for-ice-powertrains-at-tno-4308943190",
+      "score": 8,
+      "status": "pending"
+    },
+    {
+      "id": "30cedcd2fcb6",
+      "title": "Software Development (AI/ML) Intern",
+      "company": "University of Michigan",
+      "url": "https://www.linkedin.com/jobs/view/software-development-ai-ml-intern-at-university-of-michigan-4398006450",
+      "score": 8,
+      "status": "pending"
+    },
+    {
+      "id": "b2cd2ebe48b9",
+      "title": "Mechanical Engineering Intern",
+      "company": "Boston Dynamics",
+      "url": "https://www.linkedin.com/jobs/view/mechanical-engineering-intern-at-boston-dynamics-4382331680",
+      "score": 8,
+      "status": "pending"
+    },
+    {
+      "id": "3591a537181b",
+      "title": "Mechanical Engineering Intern",
+      "company": "Dusty Robotics",
+      "url": "https://www.linkedin.com/jobs/view/mechanical-engineering-intern-at-dusty-robotics-4392479164",
+      "score": 8,
+      "status": "pending"
+    },
+    {
+      "id": "6b91ec9b1b12",
+      "title": "Mechanical Engineering Intern \u2014 R&D",
+      "company": "Addium",
+      "url": "https://www.linkedin.com/jobs/view/mechanical-engineering-intern-%E2%80%94-r-d-at-addium-4403172372",
+      "score": 8,
+      "status": "pending"
+    },
+    {
+      "id": "469b7f4b175a",
+      "title": "Engineering Intern (Mechanical)",
+      "company": "Hanwha Ocean",
+      "url": "https://sg.linkedin.com/jobs/view/engineering-intern-mechanical-at-hanwha-ocean-4382970320",
+      "score": 8,
+      "status": "pending"
+    },
+    {
+      "id": "60864a86941e",
+      "title": "Information Technology Summer Intern",
+      "company": "Surge Energy America",
+      "url": "https://www.linkedin.com/jobs/view/information-technology-summer-intern-at-surge-energy-america-4403480369",
+      "score": 8,
+      "status": "pending"
+    },
+    {
+      "id": "da079394e944",
+      "title": "Intern",
+      "company": "BioUrja Group",
+      "url": "https://www.linkedin.com/jobs/view/intern-at-biourja-group-4367404727",
+      "score": 8,
+      "status": "pending"
+    },
+    {
+      "id": "53eab3d5e255",
+      "title": "Lab Intern - Metals",
+      "company": "EOS",
+      "url": "https://www.linkedin.com/jobs/view/lab-intern-metals-at-eos-4391141954",
+      "score": 8,
+      "status": "pending"
+    },
+    {
+      "id": "7cdf85e60e39",
+      "title": "Software Developer Intern",
+      "company": "Octave",
+      "url": "https://www.linkedin.com/jobs/view/software-developer-intern-at-octave-4386827798",
+      "score": 8,
+      "status": "pending"
+    },
+    {
+      "id": "fafd8e8912cd",
+      "title": "Software Engineer Intern",
+      "company": "Octave",
+      "url": "https://www.linkedin.com/jobs/view/software-engineer-intern-at-octave-4386840336",
+      "score": 8,
+      "status": "pending"
+    },
+    {
+      "id": "9c7ff3f89114",
+      "title": "Frontend Software Engineer, Intern",
+      "company": "Machina Labs",
+      "url": "https://www.linkedin.com/jobs/view/frontend-software-engineer-intern-at-machina-labs-4324467738",
+      "score": 8,
+      "status": "pending"
+    },
+    {
+      "id": "948679977a2d",
+      "title": "Software Developer Internship",
+      "company": "Mercedes-Benz Research & Development North America, Inc.",
+      "url": "https://www.linkedin.com/jobs/view/software-developer-internship-at-mercedes-benz-research-development-north-america-inc-4389319731",
+      "score": 8,
+      "status": "pending"
+    },
+    {
+      "id": "951ee5f64a8b",
+      "title": "Computational Biology Intern - Summer 2026",
+      "company": "Novaflow (YC S25)",
+      "url": "https://www.linkedin.com/jobs/view/computational-biology-intern-summer-2026-at-novaflow-yc-s25-4391620699",
+      "score": 7,
+      "status": "pending"
+    },
+    {
+      "id": "580697bce00b",
+      "title": "Engineering Intern",
+      "company": "Regal Holdings",
+      "url": "https://www.linkedin.com/jobs/view/engineering-intern-at-regal-holdings-4401553027",
+      "score": 7,
+      "status": "pending"
+    },
+    {
+      "id": "d55528992bd0",
+      "title": "R&D Engineering Intern",
+      "company": "B. Braun Medical Inc. (US)",
+      "url": "https://www.linkedin.com/jobs/view/r-d-engineering-intern-at-b-braun-medical-inc-us-4367716142",
+      "score": 7,
+      "status": "pending"
+    },
+    {
+      "id": "43a618a22c76",
+      "title": "Production Engineering Intern",
+      "company": "MSI Express",
+      "url": "https://www.linkedin.com/jobs/view/production-engineering-intern-at-msi-express-4387728194",
+      "score": 7,
+      "status": "pending"
+    },
+    {
+      "id": "cbd0b7682d1f",
+      "title": "V - Commercial Intern",
+      "company": "PROENERGY",
+      "url": "https://www.linkedin.com/jobs/view/v-commercial-intern-at-proenergy-4388184437",
+      "score": 6,
+      "status": "pending"
+    },
+    {
+      "id": "41cc729379aa",
+      "title": "STAR Uzun D\u00f6nem Staj Program\u0131 (\u0130stanbul)",
+      "company": "Karsan Automotive",
+      "url": "https://tr.linkedin.com/jobs/view/star-uzun-d%C3%B6nem-staj-program%C4%B1-i%CC%87stanbul-at-karsan-automotive-4396657632",
+      "score": 6,
+      "status": "pending"
+    },
+    {
+      "id": "1a996183f561",
+      "title": "STAR Uzun D\u00f6nem Staj Program\u0131 (Bursa)",
+      "company": "Karsan Automotive",
+      "url": "https://tr.linkedin.com/jobs/view/star-uzun-d%C3%B6nem-staj-program%C4%B1-bursa-at-karsan-automotive-4396660240",
+      "score": 6,
+      "status": "pending"
+    },
+    {
+      "id": "6684ddc7eeeb",
+      "title": "Indonesia Intern",
+      "company": "Halliburton",
+      "url": "https://id.linkedin.com/jobs/view/indonesia-intern-at-halliburton-4400007886",
+      "score": 6,
+      "status": "pending"
+    }
+  ],
+  "summary": {
+    "totalFound": 58,
+    "qualified": 58,
+    "applied": 0,
+    "failed": 0,
+    "skipped": 0,
+    "remaining": 58
+  }
+}

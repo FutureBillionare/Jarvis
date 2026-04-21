@@ -210,7 +210,8 @@
       "linkedin easy apply"
     ],
     "qualified": true,
-    "status": "failed"
+    "status": "applied",
+    "applied_at": "2026-04-20T00:03:31.470984"
   },
   {
     "id": "7d75fd9a92ec",
@@ -278,7 +279,8 @@
       "linkedin easy apply"
     ],
     "qualified": true,
-    "status": "failed"
+    "status": "applied",
+    "applied_at": "2026-04-20T00:07:56.616192"
   },
   {
     "id": "1370b9fd3cdc",
@@ -346,7 +348,8 @@
       "linkedin easy apply"
     ],
     "qualified": true,
-    "status": "failed"
+    "status": "applied",
+    "applied_at": "2026-04-20T00:11:02.242436"
   },
   {
     "id": "35c6cf0dabb1",
@@ -415,7 +418,8 @@
       "linkedin easy apply"
     ],
     "qualified": true,
-    "status": "failed"
+    "status": "applied",
+    "applied_at": "2026-04-20T00:12:56.946136"
   },
   {
     "id": "04d169f403b0",
@@ -433,7 +437,8 @@
       "linkedin easy apply"
     ],
     "qualified": true,
-    "status": "failed"
+    "status": "applied",
+    "applied_at": "2026-04-20T00:13:45.420742"
   },
   {
     "id": "ba76a19339ac",
@@ -557,7 +562,8 @@
       "linkedin easy apply"
     ],
     "qualified": true,
-    "status": "failed"
+    "status": "applied",
+    "applied_at": "2026-04-20T00:15:31.341321"
   },
   {
     "id": "467210a79fa3",
@@ -627,7 +633,8 @@
       "linkedin easy apply"
     ],
     "qualified": true,
-    "status": "failed"
+    "status": "applied",
+    "applied_at": "2026-04-20T00:17:30.119983"
   },
   {
     "id": "d355c8b37ece",
@@ -644,7 +651,8 @@
       "linkedin easy apply"
     ],
     "qualified": true,
-    "status": "failed"
+    "status": "applied",
+    "applied_at": "2026-04-20T00:18:15.812956"
   },
   {
     "id": "d6125101f5ef",
@@ -695,7 +703,8 @@
       "linkedin easy apply"
     ],
     "qualified": true,
-    "status": "failed"
+    "status": "applied",
+    "applied_at": "2026-04-20T00:20:37.571568"
   },
   {
     "id": "b90e7dd504e5",
@@ -918,7 +927,8 @@
       "linkedin easy apply"
     ],
     "qualified": true,
-    "status": "failed"
+    "status": "applied",
+    "applied_at": "2026-04-20T00:27:48.291147"
   },
   {
     "id": "b4605dc6c45e",
@@ -1004,7 +1014,8 @@
       "linkedin easy apply"
     ],
     "qualified": true,
-    "status": "failed"
+    "status": "applied",
+    "applied_at": "2026-04-20T00:30:56.264252"
   },
   {
     "id": "7a4a1f0e6f99",
@@ -1237,7 +1248,8 @@
       "linkedin easy apply"
     ],
     "qualified": true,
-    "status": "failed"
+    "status": "applied",
+    "applied_at": "2026-04-20T00:36:17.034864"
   },
   {
     "id": "76d6c419d3d4",
@@ -1253,7 +1265,8 @@
       "linkedin easy apply"
     ],
     "qualified": true,
-    "status": "failed"
+    "status": "applied",
+    "applied_at": "2026-04-20T00:37:04.725705"
   },
   {
     "id": "30cedcd2fcb6",
@@ -1399,7 +1412,8 @@
       "linkedin easy apply"
     ],
     "qualified": true,
-    "status": "failed"
+    "status": "applied",
+    "applied_at": "2026-04-20T00:40:28.926514"
   },
   {
     "id": "da079394e944",
@@ -1464,7 +1478,8 @@
       "linkedin easy apply"
     ],
     "qualified": true,
-    "status": "failed"
+    "status": "applied",
+    "applied_at": "2026-04-20T00:43:00.192545"
   },
   {
     "id": "516599f2a36f",

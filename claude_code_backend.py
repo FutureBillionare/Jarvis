@@ -16,8 +16,13 @@ import threading
 import shutil
 from typing import Callable
 
-_HISTORY_TURNS = 24   # max turns to inject (12 exchanges)
-_TURN_MAX_CHARS = 600 # truncate very long turns in the history prefix
+_HISTORY_TURNS = 32   # max turns to inject (16 exchanges)
+# Per-turn truncation cap. Recent turns are kept verbatim; only turns older than
+# _RECENT_FULL_TURNS are subject to the cap. Older cap was 600 chars which was
+# eating user instructions and HUBERT's own prior reasoning, causing him to
+# "forget" things said earlier in the conversation.
+_TURN_MAX_CHARS = 4000
+_RECENT_FULL_TURNS = 12   # last N turns kept untruncated regardless of length
 
 
 def _find_claude_bin() -> str | None:
@@ -70,10 +75,13 @@ def _build_prompt(message: str, history: list[dict] | None,
     if history:
         recent = history[-_HISTORY_TURNS:]
         lines = []
-        for turn in recent:
+        protected_start = max(0, len(recent) - _RECENT_FULL_TURNS)
+        for idx, turn in enumerate(recent):
             role    = "User" if turn["role"] == "user" else "HUBERT"
             content = turn["content"]
-            if len(content) > _TURN_MAX_CHARS:
+            # Recent turns are kept fully — only older history is capped, and the
+            # cap is generous so we don't lose paragraph-length instructions.
+            if idx < protected_start and len(content) > _TURN_MAX_CHARS:
                 content = content[:_TURN_MAX_CHARS] + "…"
             lines.append(f"{role}: {content}")
         if lines:

@@ -3942,6 +3942,7 @@ class HubertApp(ctk.CTk):
         self.chat.system("Hubert online — all systems operational.")
         self._show_weather_card()
         self._start_dream_scheduler()
+        self._start_task_scheduler()
         # Preload Whisper + mic index in background
         threading.Thread(target=_get_whisper,   daemon=True).start()
         threading.Thread(target=_get_mic_index, daemon=True).start()
@@ -4130,6 +4131,24 @@ class HubertApp(ctk.CTk):
                                          ("HUBERT dreamed tonight — insights written to Obsidian.",)))
                         except Exception:
                             pass
+                except Exception:
+                    pass
+                time.sleep(60)
+        threading.Thread(target=_scheduler, daemon=True).start()
+
+    def _start_task_scheduler(self):
+        """Persistent task scheduler — checks every 60s, runs missed tasks on startup."""
+        def _scheduler():
+            from tools.custom.task_scheduler import run_due_tasks
+            first_run = True
+            while True:
+                try:
+                    results = run_due_tasks(source="startup" if first_run else "scheduled")
+                    first_run = False
+                    for r in results:
+                        icon = "✓" if r["status"] == "ok" else "✗"
+                        msg  = f"[Scheduler] {icon} {r['name']}: {r['detail']}"
+                        self._q.put((self.chat.system, (msg,)))
                 except Exception:
                     pass
                 time.sleep(60)

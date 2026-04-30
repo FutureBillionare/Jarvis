@@ -505,57 +505,44 @@ class JarvisCore:
                     }
 
     def _compress_history(self):
-        """Truncate old tool results to save tokens. Keeps last 6 turns intact.
+        """Truncate bulky tool results to save tokens. Preserves all conversational
+        text so HUBERT does not "forget" earlier instructions or reasoning.
 
-        Compression thresholds (applied to turns outside the protected window):
-        - Tool results > 150 chars → truncated to 150 chars
-        - Large text assistant turns > 400 chars → truncated to 200 chars
-        History is pruned to at most 40 turns when it grows past 50.
+        Compression rules:
+        - Tool results > 800 chars → truncated to 800 chars (was 150 — too aggressive,
+          stripped most context HUBERT needed to follow up on a tool's output).
+        - Assistant text blocks are NEVER compressed. Past reasoning, promises, and
+          plans must remain intact or HUBERT loses thread of the conversation.
+        - User text messages are NEVER compressed.
+        - Protected window: last 16 turns (was 6) stay completely untouched.
+        - Hard prune: only when history exceeds 80 turns, keep last 60.
         """
         n = len(self.conversation_history)
 
-        # Hard prune: drop oldest turns (pairs) if history is very long
-        if n > 50:
-            # Keep the most recent 36 turns (18 exchange pairs)
-            self.conversation_history = self.conversation_history[-36:]
+        if n > 80:
+            self.conversation_history = self.conversation_history[-60:]
             n = len(self.conversation_history)
 
-        if n < 14:
+        if n < 24:
             return
 
-        cutoff = n - 6  # protect the last 6 turns
+        cutoff = n - 16  # protect the last 16 turns from any modification
         for i, turn in enumerate(self.conversation_history[:cutoff]):
-            # Compress tool results in user turns
+            # Only compress oversized tool_result payloads — never user/assistant text
             if turn["role"] == "user" and isinstance(turn["content"], list):
                 compressed, changed = [], False
                 for block in turn["content"]:
                     raw = str(block.get("content", ""))
-                    if block.get("type") == "tool_result" and len(raw) > 150:
+                    if block.get("type") == "tool_result" and len(raw) > 800:
                         compressed.append({
                             **block,
-                            "content": raw[:150] + " …[compressed]",
+                            "content": raw[:800] + " …[compressed]",
                         })
                         changed = True
                     else:
                         compressed.append(block)
                 if changed:
                     self.conversation_history[i] = {"role": "user", "content": compressed}
-
-            # Compress large text blocks in assistant turns
-            elif turn["role"] == "assistant" and isinstance(turn["content"], list):
-                compressed, changed = [], False
-                for block in turn["content"]:
-                    if (block.get("type") == "text"
-                            and len(block.get("text", "")) > 400):
-                        compressed.append({
-                            **block,
-                            "text": block["text"][:200] + " …[compressed]",
-                        })
-                        changed = True
-                    else:
-                        compressed.append(block)
-                if changed:
-                    self.conversation_history[i] = {"role": "assistant", "content": compressed}
 
     def chat(
         self,
@@ -769,14 +756,22 @@ class JarvisCore:
                     "tool_use" in str(e) or "tool_result" in str(e)
                 ):
                     # Orphaned tool_use/tool_result blocks from a pruned or interrupted session.
-                    # Strip offending assistant turns and let _sanitize_history clean up the rest.
-                    _log_error(f"400 tool orphan — stripping bad history (iteration {iteration})", e)
+                    # Surgically remove ONLY the tool_use blocks while preserving any text
+                    # blocks in those assistant turns — losing past reasoning was making
+                    # HUBERT forget context the user gave him earlier.
+                    _log_error(f"400 tool orphan — surgically stripping tool blocks (iteration {iteration})", e)
                     cleaned = []
                     for turn in self.conversation_history:
                         if turn["role"] == "assistant" and isinstance(turn.get("content"), list):
-                            if any(b.get("type") == "tool_use" for b in turn["content"] if isinstance(b, dict)):
-                                continue  # drop the offending assistant turn
-                        cleaned.append(turn)
+                            kept = [
+                                b for b in turn["content"]
+                                if not (isinstance(b, dict) and b.get("type") == "tool_use")
+                            ]
+                            if kept:
+                                cleaned.append({"role": "assistant", "content": kept})
+                            # if nothing left (turn was pure tool_use), drop the empty turn
+                        else:
+                            cleaned.append(turn)
                     self.conversation_history = cleaned
                     self._sanitize_history()
                     if on_status:

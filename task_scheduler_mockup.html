@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HUBERT — Task Scheduler HUD Mockup</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg:        #060810;
+    --bg-panel:  #080c1a;
+    --bg-card:   #0a0f1e;
+    --bg-input:  #0b1120;
+    --accent:    #00d4ff;
+    --accent2:   #6644ff;
+    --accent3:   #00ff9d;
+    --dim:       #131e3a;
+    --dim2:      #1a2848;
+    --text:      #d0e8ff;
+    --text-dim:  #2e4468;
+    --text-tool: #00cc88;
+    --text-err:  #ff3355;
+    --text-usr:  #5599ff;
+    --purple:    #8866ff;
+    --green:     #00ff9d;
+    --red:       #ff3355;
+    --mono:      'Consolas', 'Courier New', monospace;
+  }
+
+  body {
+    background: var(--bg);
+    font-family: var(--mono);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── TOP HEADER (simulates HUBERT's existing header) ── */
+  .hubert-header {
+    background: var(--bg-panel);
+    border-bottom: 1px solid var(--dim);
+    padding: 8px 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .hubert-logo {
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: 3px;
+  }
+  .hubert-status-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 6px var(--green);
+  }
+  .hubert-status-text {
+    color: var(--text-tool);
+    font-size: 11px;
+  }
+  .header-spacer { flex: 1; }
+  .hubert-time {
+    color: var(--text-dim);
+    font-size: 11px;
+    letter-spacing: 1px;
+  }
+
+  /* ── TASK SCHEDULER HUD BAND ── */
+  .task-scheduler-hud {
+    background: var(--bg-panel);
+    border-bottom: 2px solid var(--dim2);
+    padding: 10px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .hud-title-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 2px;
+  }
+  .hud-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+  }
+  .hud-count {
+    font-size: 10px;
+    color: var(--accent2);
+    background: rgba(102, 68, 255, 0.12);
+    border: 1px solid rgba(102, 68, 255, 0.3);
+    border-radius: 3px;
+    padding: 1px 6px;
+  }
+  .hud-add-btn {
+    margin-left: auto;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--accent);
+    background: rgba(0, 212, 255, 0.08);
+    border: 1px solid rgba(0, 212, 255, 0.25);
+    border-radius: 4px;
+    padding: 3px 10px;
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: all 0.15s;
+  }
+  .hud-add-btn:hover {
+    background: rgba(0, 212, 255, 0.18);
+    border-color: var(--accent);
+  }
+
+  .task-cards-row {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+  .task-cards-row::-webkit-scrollbar { height: 4px; }
+  .task-cards-row::-webkit-scrollbar-track { background: var(--dim); }
+  .task-cards-row::-webkit-scrollbar-thumb { background: var(--dim2); border-radius: 2px; }
+
+  /* ── TASK CARD ── */
+  .task-card {
+    flex: 0 0 220px;
+    background: var(--bg-card);
+    border-radius: 6px;
+    border: 1px solid var(--dim);
+    padding: 10px 12px 8px;
+    position: relative;
+    transition: border-color 0.2s;
+  }
+  .task-card:hover { border-color: var(--dim2); }
+
+  .task-card.active {
+    border-left: 3px solid var(--green);
+  }
+  .task-card.inactive {
+    border-left: 3px solid var(--red);
+    opacity: 0.7;
+  }
+
+  .card-top {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 5px;
+  }
+  .status-pill {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .active .status-pill {
+    background: var(--green);
+    box-shadow: 0 0 5px var(--green);
+  }
+  .inactive .status-pill {
+    background: var(--red);
+    box-shadow: 0 0 5px var(--red);
+  }
+
+  .task-name {
+    font-size: 11px;
+    color: var(--text);
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+  }
+  .task-status-label {
+    font-size: 9px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+  .active .task-status-label { color: var(--green); }
+  .inactive .task-status-label { color: var(--red); }
+
+  .task-desc {
+    font-size: 10px;
+    color: var(--text-dim);
+    line-height: 1.4;
+    margin-bottom: 7px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .task-schedule-row {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 8px;
+  }
+  .clock-icon {
+    font-size: 9px;
+    color: var(--text-dim);
+  }
+  .task-time {
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 1px;
+  }
+  .task-freq {
+    font-size: 9px;
+    color: var(--text-dim);
+  }
+
+  .card-actions {
+    display: flex;
+    gap: 5px;
+    border-top: 1px solid var(--dim);
+    padding-top: 7px;
+  }
+  .card-btn {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.5px;
+    border-radius: 3px;
+    padding: 2px 8px;
+    cursor: pointer;
+    border: 1px solid;
+    transition: all 0.15s;
+    flex: 1;
+    text-align: center;
+  }
+  .btn-toggle-off {
+    color: var(--text-dim);
+    border-color: var(--text-dim);
+    background: transparent;
+  }
+  .btn-toggle-off:hover {
+    color: var(--green);
+    border-color: var(--green);
+    background: rgba(0, 255, 157, 0.07);
+  }
+  .btn-toggle-on {
+    color: var(--green);
+    border-color: var(--green);
+    background: rgba(0, 255, 157, 0.07);
+  }
+  .btn-toggle-on:hover {
+    color: var(--text-dim);
+    border-color: var(--text-dim);
+    background: transparent;
+  }
+  .btn-delete {
+    color: var(--text-err);
+    border-color: rgba(255, 51, 85, 0.3);
+    background: transparent;
+    flex: 0 0 auto;
+    padding: 2px 6px;
+  }
+  .btn-delete:hover {
+    background: rgba(255, 51, 85, 0.12);
+    border-color: var(--red);
+  }
+
+  /* ── MAIN BODY (placeholder for existing HUBERT panels) ── */
+  .hubert-body {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 240px 1fr 260px;
+    gap: 0;
+  }
+
+  .panel {
+    background: var(--bg-panel);
+    border-right: 1px solid var(--dim);
+    padding: 14px 12px;
+  }
+  .panel:last-child { border-right: none; }
+  .panel-title {
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .panel-placeholder {
+    color: var(--dim2);
+    font-size: 10px;
+    text-align: center;
+    margin-top: 40px;
+  }
+
+  /* ── ANNOTATION ARROW (for mockup only) ── */
+  .annotation {
+    position: fixed;
+    top: 100px;
+    right: 20px;
+    background: rgba(102, 68, 255, 0.15);
+    border: 1px solid var(--accent2);
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 10px;
+    color: var(--purple);
+    max-width: 200px;
+    line-height: 1.5;
+    pointer-events: none;
+    z-index: 100;
+  }
+  .annotation strong { color: var(--accent); }
+
+  /* Simulate next-run countdown */
+  .next-run {
+    font-size: 9px;
+    color: var(--accent2);
+    margin-top: 1px;
+  }
+</style>
+</head>
+<body>
+
+<!-- Existing HUBERT header bar -->
+<div class="hubert-header">
+  <div class="hubert-logo">H.U.B.E.R.T</div>
+  <div class="hubert-status-dot"></div>
+  <div class="hubert-status-text">READY</div>
+  <div class="header-spacer"></div>
+  <div class="hubert-time" id="clock">--:-- --</div>
+</div>
+
+<!-- ★ NEW: Task Scheduler HUD band (sits above the 3-panel layout) -->
+<div class="task-scheduler-hud">
+  <div class="hud-title-row">
+    <span class="hud-label">Scheduled Tasks</span>
+    <span class="hud-count" id="active-count">2 active</span>
+    <button class="hud-add-btn">+ NEW TASK</button>
+  </div>
+
+  <div class="task-cards-row">
+
+    <!-- Card 1: Internship Getter — ACTIVE -->
+    <div class="task-card active" id="card-internship">
+      <div class="card-top">
+        <div class="status-pill"></div>
+        <div class="task-name">Internship Getter</div>
+        <div class="task-status-label">ACTIVE</div>
+      </div>
+      <div class="task-desc">Search & apply to new internship listings</div>
+      <div class="task-schedule-row">
+        <span class="clock-icon">⏰</span>
+        <span class="task-time">8:00 AM</span>
+        <span class="task-freq">· Daily (Mon–Fri)</span>
+      </div>
+      <div class="next-run">Next run: tomorrow 8:00 AM</div>
+      <div class="card-actions" style="margin-top:8px">
+        <button class="card-btn btn-toggle-on" onclick="toggleCard('card-internship', this)">DISABLE</button>
+        <button class="card-btn btn-delete" onclick="deleteCard('card-internship')">✕</button>
+      </div>
+    </div>
+
+    <!-- Card 2: Alcohol Getter — ACTIVE -->
+    <div class="task-card active" id="card-alcohol">
+      <div class="card-top">
+        <div class="status-pill"></div>
+        <div class="task-name">Alcohol Getter</div>
+        <div class="task-status-label">ACTIVE</div>
+      </div>
+      <div class="task-desc">Locate nearby bars & liquor stores on trigger</div>
+      <div class="task-schedule-row">
+        <span class="clock-icon">⚡</span>
+        <span class="task-time">ON TRIGGER</span>
+        <span class="task-freq">· Port 8878</span>
+      </div>
+      <div class="next-run">Waiting for trigger phrase</div>
+      <div class="card-actions" style="margin-top:8px">
+        <button class="card-btn btn-toggle-on" onclick="toggleCard('card-alcohol', this)">DISABLE</button>
+        <button class="card-btn btn-delete" onclick="deleteCard('card-alcohol')">✕</button>
+      </div>
+    </div>
+
+    <!-- Card 3: Open Trader — INACTIVE (example) -->
+    <div class="task-card inactive" id="card-trader">
+      <div class="card-top">
+        <div class="status-pill"></div>
+        <div class="task-name">Fincept Trader</div>
+        <div class="task-status-label">INACTIVE</div>
+      </div>
+      <div class="task-desc">Launch Fincept Terminal on market open</div>
+      <div class="task-schedule-row">
+        <span class="clock-icon">⏰</span>
+        <span class="task-time">9:30 AM</span>
+        <span class="task-freq">· Weekdays only</span>
+      </div>
+      <div class="next-run" style="color:var(--text-dim)">Disabled</div>
+      <div class="card-actions" style="margin-top:8px">
+        <button class="card-btn btn-toggle-off" onclick="toggleCard('card-trader', this)">ENABLE</button>
+        <button class="card-btn btn-delete" onclick="deleteCard('card-trader')">✕</button>
+      </div>
+    </div>
+
+    <!-- Card 4: Placeholder "add" slot -->
+    <div class="task-card" style="border: 1px dashed var(--dim2); display:flex; align-items:center; justify-content:center; cursor:pointer; opacity:0.5; min-width:120px; flex: 0 0 120px;">
+      <span style="font-size:22px; color:var(--text-dim)">＋</span>
+    </div>
+
+  </div>
+</div>
+
+<!-- Existing 3-panel body (placeholder) -->
+<div class="hubert-body">
+  <div class="panel">
+    <div class="panel-title">Swarm Panel</div>
+    <div class="panel-placeholder">[ agents / tools ]</div>
+  </div>
+  <div class="panel">
+    <div class="panel-title">Chat</div>
+    <div class="panel-placeholder">[ conversation feed ]</div>
+  </div>
+  <div class="panel">
+    <div class="panel-title">HUD Panel</div>
+    <div class="panel-placeholder">[ metrics / status ]</div>
+  </div>
+</div>
+
+<!-- Mockup annotation -->
+<div class="annotation">
+  <strong>↑ NEW BAND</strong><br>
+  Task Scheduler sits between the header bar and the main panels. Scrolls horizontally if tasks overflow.
+</div>
+
+<script>
+  // Live clock
+  function updateClock() {
+    const now = new Date();
+    let h = now.getHours(), m = now.getMinutes();
+    const ampm = h >= 12 ? 'PM' : 'AM';
+    h = h % 12 || 12;
+    document.getElementById('clock').textContent =
+      `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')} ${ampm}`;
+  }
+  updateClock();
+  setInterval(updateClock, 30000);
+
+  function updateActiveCount() {
+    const active = document.querySelectorAll('.task-card.active').length;
+    document.getElementById('active-count').textContent = active + ' active';
+  }
+
+  function toggleCard(id, btn) {
+    const card = document.getElementById(id);
+    const isActive = card.classList.contains('active');
+    const pill = card.querySelector('.status-pill');
+    const statusLabel = card.querySelector('.task-status-label');
+    const nextRun = card.querySelector('.next-run');
+
+    if (isActive) {
+      card.classList.replace('active', 'inactive');
+      statusLabel.textContent = 'INACTIVE';
+      btn.textContent = 'ENABLE';
+      btn.className = 'card-btn btn-toggle-off';
+      nextRun.style.color = 'var(--text-dim)';
+      nextRun.textContent = 'Disabled';
+    } else {
+      card.classList.replace('inactive', 'active');
+      statusLabel.textContent = 'ACTIVE';
+      btn.textContent = 'DISABLE';
+      btn.className = 'card-btn btn-toggle-on';
+      nextRun.style.color = 'var(--accent2)';
+      nextRun.textContent = 'Next run: tomorrow 8:00 AM';
+    }
+    updateActiveCount();
+  }
+
+  function deleteCard(id) {
+    const card = document.getElementById(id);
+    card.style.transition = 'opacity 0.2s, transform 0.2s';
+    card.style.opacity = '0';
+    card.style.transform = 'scale(0.95)';
+    setTimeout(() => { card.remove(); updateActiveCount(); }, 200);
+  }
+</script>
+</body>
+</html>

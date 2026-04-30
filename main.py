@@ -2,7 +2,7 @@
 H.U.B.E.R.T. — Highly Unified Brilliant Experimental Research Terminal
 Powered by Claude Sonnet 4.6
 """
-import sys, math, threading, queue, time, os, random, datetime, platform, subprocess
+import sys, math, threading, queue, time, os, random, datetime, platform, subprocess, json
 import tkinter as tk
 import customtkinter as ctk
 from pathlib import Path
@@ -3291,12 +3291,8 @@ class MenuDrawer(ctk.CTkFrame):
 
     def _open_memory_map(self):
         self.hide()
-        import subprocess
-        # Ensure Obsidian is open on HUBERT_Vault with the canvas
-        subprocess.Popen(
-            ["open", "obsidian://open?vault=HUBERT_Vault&file=HUBERT_Memory_Map.canvas"],
-            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
-        )
+        import os
+        os.startfile(r"C:\Users\Jake\HUBERT_Vault\HUBERT_Memory_Map.canvas")
 
     def _open_skills(self):
         self.hide()
@@ -3442,6 +3438,194 @@ class VideoPreviewDialog(SafeTopLevel):
         self.destroy()
         self._on_send(self._video_path, caption)
 
+
+
+# ── Task Scheduler Band ───────────────────────────────────────────────────────
+
+_TASKS_FILE = Path(__file__).parent / "tasks.json"
+
+SCHED_GREEN      = "#00ff9d"
+SCHED_GREEN_DIM  = "#003322"
+SCHED_RED        = "#ff3355"
+SCHED_RED_DIM    = "#330011"
+
+def _load_tasks() -> list:
+    try:
+        return json.loads(_TASKS_FILE.read_text(encoding="utf-8"))
+    except Exception:
+        return []
+
+def _save_tasks(tasks: list):
+    try:
+        _TASKS_FILE.write_text(json.dumps(tasks, indent=2), encoding="utf-8")
+    except Exception:
+        pass
+
+def _next_run_label(cron_str: str) -> str:
+    """Return a human-readable string for the next scheduled run."""
+    try:
+        # Simple parser for "0 8 * * *" style — only handles fixed hour/minute
+        parts = cron_str.split()
+        if len(parts) != 5:
+            return ""
+        minute, hour = int(parts[0]), int(parts[1])
+        now = datetime.datetime.now()
+        candidate = now.replace(hour=hour, minute=minute, second=0, microsecond=0)
+        if candidate <= now:
+            candidate += datetime.timedelta(days=1)
+        delta = candidate - now
+        h, rem = divmod(int(delta.total_seconds()), 3600)
+        m = rem // 60
+        if h > 0:
+            return f"next in {h}h {m}m"
+        return f"next in {m}m"
+    except Exception:
+        return ""
+
+
+class TaskSchedulerBand(tk.Frame):
+    """Horizontal HUD strip showing scheduled tasks. Sits between the
+    header bar and the three-column PanedWindow."""
+
+    _CARD_W  = 260
+    _CARD_H  = 72
+    _PAD     = 8
+
+    def __init__(self, parent, **kwargs):
+        super().__init__(parent, bg=BG_PANEL,
+                         highlightbackground=DIM, highlightthickness=1,
+                         height=self._CARD_H + self._PAD * 2, **kwargs)
+        self.pack_propagate(False)
+        self._cards: list[tk.Frame] = []
+        self._tasks: list[dict]     = []
+        self._build()
+        self._refresh()
+
+    # ── header label + "ADD" placeholder ──────────────────────────────────────
+    def _build(self):
+        # Left label
+        tk.Label(self, text="  ◈ TASK SCHEDULER",
+                 font=(_MONO_FONT, 8, "bold"), fg=ACCENT, bg=BG_PANEL,
+                 anchor="w").place(x=6, y=2)
+
+        # Scrollable card container
+        self._scroll_frame = tk.Frame(self, bg=BG_PANEL)
+        self._scroll_frame.place(x=0, y=16,
+                                 width=self.winfo_reqwidth(),
+                                 height=self._CARD_H + self._PAD)
+        self.bind("<Configure>", self._on_resize)
+
+    def _on_resize(self, event=None):
+        w = self.winfo_width()
+        self._scroll_frame.place_configure(width=w)
+
+    # ── Full redraw ───────────────────────────────────────────────────────────
+    def _refresh(self):
+        for c in self._cards:
+            try:
+                c.destroy()
+            except Exception:
+                pass
+        self._cards.clear()
+        self._tasks = _load_tasks()
+        x = self._PAD
+        for i, task in enumerate(self._tasks):
+            card = self._make_card(self._scroll_frame, task, i)
+            card.place(x=x, y=self._PAD // 2,
+                       width=self._CARD_W, height=self._CARD_H - 2)
+            self._cards.append(card)
+            x += self._CARD_W + self._PAD
+
+        # Schedule next refresh (every 60 s to update "next in Xh Ym")
+        self.after(60_000, self._refresh)
+
+    def _make_card(self, parent, task: dict, idx: int) -> tk.Frame:
+        active  = task.get("active", True)
+        border  = SCHED_GREEN if active else SCHED_RED
+        bg_dim  = SCHED_GREEN_DIM if active else SCHED_RED_DIM
+        dot_col = SCHED_GREEN if active else SCHED_RED
+
+        card = tk.Frame(parent, bg=BG_CARD,
+                        highlightbackground=border, highlightthickness=1)
+
+        # Left accent bar
+        tk.Frame(card, bg=border, width=3).pack(side="left", fill="y")
+
+        # Content area
+        body = tk.Frame(card, bg=BG_CARD)
+        body.pack(side="left", fill="both", expand=True, padx=(5, 2), pady=3)
+
+        # Row 1: status dot + name
+        top = tk.Frame(body, bg=BG_CARD)
+        top.pack(fill="x")
+        tk.Label(top, text="●", font=(_MONO_FONT, 7), fg=dot_col,
+                 bg=BG_CARD).pack(side="left")
+        tk.Label(top, text=task.get("name", "Task"),
+                 font=(_MONO_FONT, 9, "bold"), fg=TEXT, bg=BG_CARD,
+                 anchor="w").pack(side="left", padx=(3, 0))
+
+        # Row 2: description (truncated)
+        desc = task.get("description", "")
+        if len(desc) > 38:
+            desc = desc[:36] + "…"
+        tk.Label(body, text=desc, font=(_MONO_FONT, 7), fg=TEXT_DIM,
+                 bg=BG_CARD, anchor="w", wraplength=180,
+                 justify="left").pack(fill="x")
+
+        # Row 3: schedule + next-run countdown
+        sched_str = task.get("schedule", "")
+        cron_str  = task.get("cron", "")
+        next_lbl  = _next_run_label(cron_str) if active else "disabled"
+        tk.Label(body, text=f"⏱ {sched_str}   {next_lbl}",
+                 font=(_MONO_FONT, 7), fg=ACCENT2 if active else TEXT_DIM,
+                 bg=BG_CARD, anchor="w").pack(fill="x")
+
+        # Button row
+        btns = tk.Frame(card, bg=BG_CARD)
+        btns.pack(side="right", fill="y", padx=(0, 4))
+
+        # Disable/Enable toggle
+        tog_text  = "DISABLE" if active else "ENABLE"
+        tog_fg    = SCHED_RED if active else SCHED_GREEN
+        tog_btn = tk.Button(btns, text=tog_text,
+                            font=(_MONO_FONT, 7, "bold"),
+                            fg=tog_fg, bg=DIM, relief="flat",
+                            activebackground=DIM2, activeforeground=tog_fg,
+                            bd=0, padx=4, pady=2, cursor="hand2",
+                            command=lambda i=idx: self._toggle(i))
+        tog_btn.pack(fill="x", pady=(6, 2))
+
+        # Delete
+        del_btn = tk.Button(btns, text="DELETE",
+                            font=(_MONO_FONT, 7, "bold"),
+                            fg=TEXT_ERR, bg=DIM, relief="flat",
+                            activebackground=DIM2, activeforeground=TEXT_ERR,
+                            bd=0, padx=4, pady=2, cursor="hand2",
+                            command=lambda i=idx: self._delete(i))
+        del_btn.pack(fill="x")
+
+        return card
+
+    def _toggle(self, idx: int):
+        tasks = _load_tasks()
+        if 0 <= idx < len(tasks):
+            tasks[idx]["active"] = not tasks[idx].get("active", True)
+            _save_tasks(tasks)
+        self._refresh()
+
+    def _delete(self, idx: int):
+        tasks = _load_tasks()
+        if 0 <= idx < len(tasks):
+            tasks.pop(idx)
+            _save_tasks(tasks)
+        self._refresh()
+
+    def add_task(self, task: dict):
+        """Programmatically add a task and redraw."""
+        tasks = _load_tasks()
+        tasks.append(task)
+        _save_tasks(tasks)
+        self._refresh()
 
 
 # ── Main App ──────────────────────────────────────────────────────────────────
@@ -3668,6 +3852,10 @@ class HubertApp(ctk.CTk):
             command=self._toggle_ollama_mode,
         )
         self._mode_btn.pack(side="left", padx=(8, 0))
+
+        # ── Task Scheduler Band ──
+        self.task_band = TaskSchedulerBand(self)
+        self.task_band.pack(fill="x", side="top")
 
         # ── Body: three-column PanedWindow ──
         self._paned = tk.PanedWindow(self, orient="horizontal",

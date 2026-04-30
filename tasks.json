@@ -1,0 +1,11 @@
+[
+  {
+    "id": "internship_getter",
+    "name": "Internship Getter",
+    "description": "Scrapes LinkedIn/Indeed/Handshake, scores listings, and auto-applies to qualified internships",
+    "schedule": "Daily at 8:00 AM",
+    "cron": "0 8 * * *",
+    "active": true,
+    "script": "internship_workflow/run_with_sheet_sync.py"
+  }
+]

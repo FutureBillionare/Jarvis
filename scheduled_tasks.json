@@ -1,0 +1,16 @@
+{
+  "tasks": [
+    {
+      "id": "daily_mac_sync",
+      "name": "Daily Mac Sync \u2014 12pm CT",
+      "hour": 12,
+      "minute": 0,
+      "action": {
+        "type": "git_push",
+        "path": "C:/Users/Jake/Jarvis"
+      },
+      "last_run": "2026-04-30T12:23:16.472035",
+      "enabled": true
+    }
+  ]
+}

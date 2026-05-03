@@ -1,241 +1,207 @@
-# Language & Lateralization — Practice Test
-**Format:** Multiple Choice | **Level:** College (Applied Concepts)
-**Instructions:** Choose the best answer for each question.
+# PBSI 235 — Unit 15: Language & Lateralization
+## Practice Exam — Multiple Choice
 
 ---
 
-## Section 1: Brain Structures & Language
+### Section 1: Defining Language
 
-**1.** A patient suffers a stroke and can now only produce single words or short, telegraphic phrases. He understands speech well but struggles to form fluent sentences. Which area is most likely damaged?
+**1.** A linguist is studying communication in honeybees, who perform a "waggle dance" to signal the direction and distance of food to other bees. The dance always looks the same for the same location and is triggered reflexively. Which of the following best explains why this does NOT qualify as language?
 
-- A) Wernicke's area
-- B) Broca's area
-- C) Angular gyrus
-- D) Primary auditory cortex
+- A) Bees are incapable of learning new signals
+- B) The signals are species-typical and not arbitrary, so they fail key criteria for language
+- C) The communication lacks a lexicon
+- D) Bees do not use morphemes
 
----
+**2.** A child growing up in rural Japan uses a completely different word for "sun" than a child in Texas, yet both words refer to the same object. Which property of language does this best illustrate?
 
-**2.** A patient can speak fluently and grammatically but her sentences contain meaningless or incorrect word substitutions (e.g., saying "telephone" when she means "chair"). She appears unaware of her errors. This pattern best describes:
+- A) Dynamism
+- B) Grammaticality
+- C) Arbitrariness
+- D) Semantic compositionality
 
-- A) Broca's aphasia
-- B) Global aphasia
-- C) Conduction aphasia
-- D) Wernicke's aphasia
+**3.** Over the past 30 years, the word "sick" has shifted from meaning "ill" to also meaning "impressive." This change in meaning represents which core feature of language?
 
----
+- A) Arbitrariness
+- B) Syntax
+- C) Dynamism
+- D) Morphological shift
 
-**3.** Damage to the arcuate fasciculus — the fiber tract connecting Broca's and Wernicke's areas — most commonly produces:
+**4.** A student is analyzing the word "unhappiness." She identifies "un-", "happy", and "-ness" as separate units of meaning. What linguistic term describes these units?
 
-- A) Complete loss of language comprehension
-- B) Inability to repeat words or phrases despite intact comprehension and production
-- C) Loss of reading ability only
-- D) Inability to produce emotional speech
+- A) Phonemes
+- B) Morphemes
+- C) Lexemes
+- D) Syntactic nodes
 
----
+**5.** A researcher is comparing a sentence's word choice ("what the words mean") versus its grammatical structure ("how the words are arranged"). Which pairing correctly maps these to their linguistic terms?
 
-**4.** A neurologist asks a patient to name a picture of a comb. The patient says "I know what it is, I use it every day, but I can't get the word out." This phenomenon is best described as:
-
-- A) Agrammatism
-- B) Anomia
-- C) Alexia
-- D) Perseveration
-
----
-
-**5.** The Wada test involves injecting sodium amobarbital into one carotid artery at a time to temporarily anesthetize one hemisphere. If a right-handed patient loses speech completely when the right hemisphere is anesthetized but not the left, what does this tell us?
-
-- A) Language is right-lateralized in this patient
-- B) Language is bilateral in this patient
-- C) Language is left-lateralized, as expected for a right-hander
-- D) This patient likely has split-brain syndrome
+- A) Semantics → word arrangement; Syntax → word meaning
+- B) Syntax → word arrangement; Semantics → word meaning
+- C) Morphology → word arrangement; Lexicon → word meaning
+- D) Grammar → word meaning; Phonetics → word arrangement
 
 ---
 
-## Section 2: Hemispheric Lateralization
+### Section 2: Language Acquisition
 
-**6.** In a split-brain patient, a picture of a spoon is flashed to the left visual field. The patient:
+**6.** Researchers note that an infant in a deaf household where ASL is the primary language produces rhythmic, repetitive hand gestures in addition to vocal babbling — well before producing any words. This finding most directly supports which position?
 
-- A) Correctly names "spoon" aloud
-- B) Can pick out the spoon with the left hand but cannot name it
-- C) Can pick out the spoon with the right hand but cannot name it
-- D) Has no awareness of the image at all
+- A) Skinner's reinforcement model, because caregivers reinforce manual gestures
+- B) Chomsky's innate grammar hypothesis, suggesting babbling is a biologically driven developmental process
+- C) The critical period hypothesis, because the infant is learning two languages simultaneously
+- D) The FOXP2 model, because genetic factors drive motor coordination in both speech and gesture
 
----
+**7.** A behaviorist argues that children learn language because parents selectively reward correct grammar and correct words. What evidence from animal language research is most consistent with this argument?
 
-**7.** Which of the following tasks would most likely show a left-hemisphere advantage in a neurologically typical right-handed individual?
+- A) Kanzi the bonobo spontaneously learned symbols by observing others
+- B) Alex the parrot could produce correct verbal responses to questions through training
+- C) Genie acquired word meaning rapidly after rescue despite no prior reinforcement
+- D) Infants babble in isolation without any caregiver present
 
-- A) Recognizing faces
-- B) Processing spatial relationships
-- C) Generating grammatically complex sentences
-- D) Detecting emotional tone in music
+**8.** Sarah, a chimpanzee trained to use symbols, was shown a blue triangle that served as her symbol for "apple." When asked to describe the symbol, she called it "round, stemmed, and red" — matching her description of a real apple. What does this finding most strongly suggest?
 
----
+- A) Sarah had learned syntactic rules similar to those of human children
+- B) Sarah's symbol had become conceptually linked to the apple's properties, not its visual form
+- C) Sarah was responding based on reinforcement from experimenters
+- D) The arbitrary nature of language is inaccessible to non-human primates
 
-**8.** Dichotic listening studies typically find that:
+**9.** "Genie" was isolated from language until age 13. After rescue, she learned individual word meanings and some grammatical rules (e.g., plurality) relatively quickly, but persistently struggled with complex syntax and verb tense. The pattern of her deficits most directly supports which idea?
 
-- A) Words presented to the left ear are processed more accurately than those to the right ear
-- B) Words presented to the right ear show a processing advantage due to dominant left-hemisphere language areas
-- C) Both ears show equal accuracy for verbal stimuli
-- D) The left ear advantage holds only for tonal languages
+- A) Grammar is purely learned through reinforcement and Genie simply lacked enough exposure
+- B) The critical period hypothesis — certain aspects of language depend on early neural development and cannot be fully acquired after synaptic pruning
+- C) The FOXP2 gene is required for vocabulary development but not syntactic learning
+- D) Language comprehension and production are processed by the same neural system
 
----
+**10.** Synaptic pruning begins around age 2 and completes the bulk of its process by age 10. A neuroscientist argues this window maps directly onto the critical period for language. Which piece of evidence most weakens this argument?
 
-**9.** A researcher finds that a patient with a severed corpus callosum can draw a cube far better with her left hand than her right hand. The best explanation is:
+- A) Genie learned some vocabulary after age 13
+- B) Broca's aphasia can occur at any age
+- C) The planum temporale is larger in infants before language acquisition begins
+- D) Second languages learned before age 10 are rarely native-level
 
-- A) The right hand is motor-dominant so it over-controls
-- B) The left hand is controlled by the right hemisphere, which has superior visuospatial processing
-- C) The left hand has more sensory feedback pathways
-- D) Drawing requires bilateral integration, which is absent
+**11.** Members of the KE family across multiple generations all showed difficulty coordinating the breath control and lip/tongue movements needed for speech, despite normal muscle strength and no paralysis. Their condition is best attributed to:
 
----
-
-**10.** The phenomenon of **hemispheric lateralization** is:
-
-- A) Present only in humans
-- B) Observed across many species including birds and non-human primates, though the degree varies
-- C) Exclusive to language processing
-- D) Reversed in left-handers compared to all other mammals
-
----
-
-## Section 3: Language Acquisition & the Critical Period
-
-**11.** Genie, the child raised in severe isolation until age 13, was eventually able to learn vocabulary but never mastered grammar. This case most directly supports:
-
-- A) The Sapir-Whorf hypothesis
-- B) The critical period hypothesis for language acquisition
-- C) Universal grammar theory
-- D) The social learning theory of language
+- A) Damage to Wernicke's area affecting speech comprehension
+- B) A mutation in FOXP2 disrupting the fine motor programs required for articulation
+- C) Global aphasia resulting from bilateral hemisphere lesions
+- D) Corpus callosum agenesis limiting interhemispheric language coordination
 
 ---
 
-**12.** According to Chomsky's **Language Acquisition Device (LAD)** concept, children acquire language rapidly and uniformly across cultures because:
+### Section 3: Lateralization
 
-- A) Parents explicitly teach grammatical rules
-- B) Humans are biologically predisposed with innate grammatical knowledge
-- C) Language is learned purely through operant conditioning
-- D) Vocabulary acquisition precedes grammar universally
+**12.** A neurologist injects a fast-acting anesthetic into the left carotid artery of a patient and the patient immediately loses the ability to speak or understand language. What does this finding provide?
 
----
+- A) Correlational evidence that language is processed bilaterally
+- B) Causal evidence that language is left-hemisphere lateralized
+- C) Evidence that the arcuate fasciculus is damaged
+- D) Evidence of Wernicke's aphasia in the right hemisphere
 
-**13.** A child hears "The dog was chased by the cat" and concludes the dog was doing the chasing. This error, called **canonical sentence bias**, reflects:
+**13.** Scientists measure the planum temporale in 50 healthy newborns before any language exposure. They consistently find it is larger on the left side. What does this finding most directly imply?
 
-- A) A deficit in Wernicke's area function
-- B) Over-reliance on word order heuristics before full syntactic processing develops
-- C) A critical period failure
-- D) Absence of mirror neuron activation
+- A) Language lateralization is the result of early environmental reinforcement
+- B) Left hemisphere specialization for language is at least partially innate
+- C) Babbling causes the left planum temporale to grow larger over time
+- D) The planum temporale is the primary site of language production
 
----
+**14.** A patient with split-brain syndrome is shown the word "APPLE" in their left visual field only. The patient verbally reports seeing nothing, but when asked to select an object from an array by touch with their left hand, they correctly pick up an apple. What best explains this pattern?
 
-**14.** Brain imaging studies of bilingual individuals who learned a second language early (before age 5) compared to those who learned it late (after age 12) typically show:
+- A) The right hemisphere comprehended the word but cannot communicate verbally because language production is left-lateralized
+- B) The left hemisphere saw the word but suppressed it due to the corpus callosum being intact
+- C) Wernicke's area in the right hemisphere processed the word and sent it to the left motor cortex
+- D) The patient is fabricating the response due to visual neglect
 
-- A) Completely separate cortical regions for each language in early bilinguals
-- B) Greater overlap in Broca's area activation for both languages in early bilinguals
-- C) Reduced gray matter volume in early bilinguals
-- D) No significant differences in neural organization
+**15.** A popular personality quiz claims people are either "left-brained" (logical, analytical) or "right-brained" (creative, artistic). Based on the Nielson et al. (2013) fMRI study, which response is most scientifically accurate?
 
----
-
-## Section 4: Applied Neurolinguistics
-
-**15.** A stroke patient cannot read but can still write normally. This dissociation — **alexia without agraphia** — results from damage to:
-
-- A) Broca's area and its connections
-- B) The left occipital lobe and the splenium of the corpus callosum, disconnecting visual input from language areas
-- C) The right temporal-parietal junction
-- D) The supplementary motor area
+- A) The left hemisphere is dominant in STEM professionals; the right hemisphere is dominant in artists
+- B) While some functions are lateralized, there is no evidence that individual personality traits map onto hemispheric dominance
+- C) The right hemisphere is dominant in all humans because it manages emotional processing
+- D) Left-brain dominance is real but only applies to language, not personality
 
 ---
 
-**16.** Which of the following would a patient with **global aphasia** most likely be able to do?
+### Section 4: Aphasias & Brain Regions
 
-- A) Read a short paragraph aloud
-- B) Write a sentence from dictation
-- C) Respond emotionally to music or emotional speech
-- D) Repeat a simple sentence after the examiner
+**16.** A 58-year-old patient is brought to the ER following a stroke. She attempts to describe her breakfast but produces only short, effortful fragments: "Egg… toast… um… no words." She understands every question asked of her perfectly. She appears frustrated and aware of her difficulty. Which diagnosis is most likely?
 
----
+- A) Wernicke's aphasia — damage to the left superior temporal lobe
+- B) Global aphasia — bilateral damage to all language centers
+- C) Broca's aphasia — damage to the left inferior frontal gyrus
+- D) Developmental verbal dyspraxia — FOXP2 mutation
 
-**17.** During an fMRI task, a participant is asked to generate verbs from nouns (e.g., "hammer" → "hit"). Compared to simply reading aloud, this task would most strongly activate:
+**17.** A second stroke patient produces long, fluent sentences but they are largely incoherent: "I went to the purple banana yesterday, and the clock smelled very table." He doesn't seem concerned by the reactions of those listening to him. Which diagnosis and lesion site are most likely?
 
-- A) Right parietal cortex
-- B) Left inferior frontal gyrus (Broca's area) and anterior cingulate cortex
-- C) Left primary motor cortex only
-- D) Bilateral occipital cortex
+- A) Broca's aphasia; left inferior frontal gyrus
+- B) Wernicke's aphasia; left superior temporal lobe
+- C) Global aphasia; bilateral cortical damage
+- D) Anomia; damage to the arcuate fasciculus
 
----
+**18.** Paul Broca's original patient, known as "Tan," could understand spoken questions but produced almost no speech. Post-mortem analysis revealed a lesion. Based on this history, where was the lesion most likely located?
 
-**18.** A researcher studying emotional prosody finds that patients with right hemisphere damage struggle to recognize whether a speaker is angry, sad, or happy — even when they understand the words. This supports the idea that:
+- A) Left superior temporal gyrus
+- B) Right inferior frontal gyrus
+- C) Left inferior frontal gyrus
+- D) Arcuate fasciculus connecting temporal and frontal lobes
 
-- A) The right hemisphere is dominant for processing the emotional tone of speech
-- B) Prosody is processed solely in the left temporal lobe
-- C) Emotional prosody and linguistic content use identical neural circuits
-- D) Amygdala damage always co-occurs with prosody deficits
+**19.** A patient with Wernicke's aphasia is handed a newspaper. A clinician reads a sentence aloud and asks her to point to the matching line in the article. The patient stares blankly and does not respond. When shown the same sentence in writing, she also fails to respond appropriately. These deficits are best described as:
 
----
+- A) Agrammatism and anomia
+- B) Word deafness and word blindness
+- C) Nonfluent aphasia with intact comprehension
+- D) Compensatory plasticity failure
 
-**19.** The **motor theory of speech perception** proposes that:
+**20.** A researcher applies transcranial magnetic stimulation (TMS) to Broca's area in healthy subjects while they judge whether two printed words are synonyms. Reaction times slow significantly. What does this finding reveal about the classical Broca's/Wernicke's model?
 
-- A) Speech sounds are perceived purely based on acoustic features
-- B) Listeners use their own motor speech system to simulate and decode the sounds they hear
-- C) Only Broca's area is needed for speech perception
-- D) Perception of speech requires conscious attention
+- A) It confirms that Broca's area handles only speech production and nothing else
+- B) It suggests Broca's area is more involved in language comprehension than the classical model predicted
+- C) It shows that Wernicke's area is required for motor production of language
+- D) It demonstrates that TMS permanently disrupts language lateralization
 
----
+**21.** The arcuate fasciculus is severed in a patient following surgery. Based on its function, which deficit would you most expect?
 
-**20.** A left-handed patient undergoes Wada testing and is found to have bilateral language representation. Compared to strongly left-lateralized individuals, this patient would most likely:
-
-- A) Be at greater risk of permanent aphasia after a unilateral left hemisphere stroke
-- B) Show faster language recovery after a unilateral stroke
-- C) Perform worse on verbal memory tasks
-- D) Have a smaller corpus callosum
-
----
-
-## Section 5: Higher-Order Language & Cognition
-
-**21.** The **Sapir-Whorf (linguistic relativity) hypothesis** predicts that:
-
-- A) All languages share a universal deep structure
-- B) The language one speaks influences how one perceives and thinks about the world
-- C) Language acquisition is independent of culture
-- D) Grammar is learned before vocabulary in all cultures
+- A) Inability to understand written language
+- B) Loss of language production due to Broca's area disconnection from motor cortex
+- C) Disrupted communication between language comprehension and production systems
+- D) Global aphasia due to bilateral disconnection of both hemispheres
 
 ---
 
-**22.** An fMRI study finds that processing metaphors ("His argument was a house of cards") activates right hemisphere regions more than literal statements. This finding is most consistent with:
+### Section 5: The Language Network & Recovery
 
-- A) The right hemisphere's role in processing indirect, non-literal language
-- B) Left hemisphere dominance for all language functions
-- C) The right hemisphere controlling semantic memory exclusively
-- D) Metaphor processing being independent of cortical language networks
+**22.** A patient suffers focal damage to Broca's area alone and initially presents with severe nonfluent aphasia. Over the next 18 months, her speech production gradually improves until near-normal. A follow-up fMRI shows that regions adjacent to Broca's area are now more active during speech. This recovery is best explained by:
 
----
+- A) Synaptic pruning reversing in adulthood
+- B) Compensatory plasticity — neighboring regions took over lost functions
+- C) The Wada test restoring function to the damaged hemisphere
+- D) Genie's case — late acquisition can restore early deficits
 
-**23.** A researcher conducts a study in which participants must decide whether two simultaneously presented words are semantically related. Accuracy is higher for word pairs in the right visual field (left hemisphere) vs. the left visual field. This result is most consistent with:
+**23.** Regev et al. (2024) recorded individual neurons across the language network and found that neurons responding to words, sentences, and word-like letter strings are distributed throughout the network rather than concentrated in Broca's or Wernicke's area alone. What is the primary implication of this finding?
 
-- A) The right hemisphere being superior at semantic processing
-- B) The left hemisphere having faster and more precise access to semantic networks
-- C) Semantic processing being subcortical
-- D) Visual field effects being unrelated to hemispheric specialization
+- A) Broca's area is exclusively responsible for grammar
+- B) Wernicke's area processes only semantic meaning
+- C) The strict functional division between Broca's and Wernicke's areas is an oversimplification at the neural level
+- D) Language is not lateralized to the left hemisphere
 
----
+**24.** An fMRI study (Federenko et al., 2024) finds that the same frontal and temporal lobe regions activate whether a subject listens to speech, reads text, or observes sign language. What does this most strongly suggest?
 
-**24.** Sign languages (e.g., ASL) are processed in:
+- A) Language comprehension is modality-specific — different inputs use different networks
+- B) The language network responds to linguistic content independent of sensory modality
+- C) Phoneme processing requires auditory input and cannot be activated by sign language
+- D) Visual processing areas drive all language comprehension
 
-- A) Exclusively right hemisphere visual regions
-- B) Primarily left hemisphere language areas, similar to spoken language
-- C) Bilateral motor cortex with no language area involvement
-- D) Right hemisphere for grammar and left hemisphere for vocabulary
+**25.** A patient with global aphasia suffers total loss of both language comprehension and production following a massive left hemisphere stroke. Compared to a patient with only Broca's aphasia, what prognosis would you predict based on lecture content?
 
----
+- A) Equally good — both patients have the same capacity for compensatory plasticity
+- B) Better — global aphasia spares Wernicke's area, enabling comprehension recovery
+- C) Worse — global aphasia represents more extensive damage with significantly less potential for recovery
+- D) The same — prognosis is determined by age, not lesion size
 
-**25.** A patient with damage to the **left angular gyrus** is most likely to exhibit:
+**26.** A linguist proposes that non-human primate vocalizations are not language because they are tied to specific contexts (e.g., a specific cry for predators, another for food) and do not change across generations. A student argues that Kanzi the bonobo learned new symbols, which refutes this. What is the most accurate resolution to this debate?
 
-- A) Broca's aphasia
-- B) Gerstmann syndrome (including dyslexia, dysgraphia, dyscalculia, and finger agnosia)
-- C) Wernicke's aphasia
-- D) Complete inability to produce speech
+- A) Kanzi's learning proves primates have full language capacity equal to humans
+- B) Kanzi's symbol learning demonstrates some plasticity, but the core criteria of language (dynamic, arbitrary, grammatical) are still not fully met in non-human primate communication
+- C) Kanzi's learning proves Chomsky's innate grammar hypothesis is wrong
+- D) Non-human primates are incapable of associating symbols with concepts
 
 ---
 
@@ -243,31 +209,29 @@
 
 | Q | Answer | Rationale |
 |---|--------|-----------|
-| 1 | B | Broca's aphasia = non-fluent, telegraphic speech with preserved comprehension |
-| 2 | D | Wernicke's aphasia = fluent but paraphasic, poor comprehension, lack of insight |
-| 3 | B | Conduction aphasia = repetition deficit despite intact comprehension and production |
-| 4 | B | Anomia = word-finding failure; classic "tip-of-tongue" in clinical settings |
-| 5 | C | Right-handers are ~95% left-lateralized; loss during right-side injection ≠ speech loss |
-| 6 | B | Left visual field → right hemisphere; right hemisphere cannot name but guides left hand |
-| 7 | C | Left hemisphere: language, grammar, sequential processing |
-| 8 | B | Right ear → left hemisphere → language advantage (right-ear advantage) |
-| 9 | B | Right hemisphere: visuospatial; left hand controlled by right hemisphere |
-| 10 | B | Lateralization is phylogenetically ancient; seen in many non-human species |
-| 11 | B | Genie's case: grammar absent after puberty → supports critical period |
-| 12 | B | LAD = innate biological predisposition to acquire language structure |
-| 13 | B | Children rely on surface word order before mastering passive syntax |
-| 14 | B | Early bilinguals share Broca's area representation; late bilinguals show more separation |
-| 15 | B | Splenium disconnects visual info from left language areas; writing intact via other routes |
-| 16 | C | Global aphasia destroys most language; emotional/prosodic processing (right hemisphere) often partially spared |
-| 17 | B | Semantic/verb generation strongly activates left IFG + ACC (executive demand) |
-| 18 | A | Right hemisphere dominant for emotional prosody/affective speech |
-| 19 | B | Motor theory: perception involves covert motor simulation of articulation |
-| 20 | B | Bilateral representation = either hemisphere can compensate after unilateral damage |
-| 21 | B | Sapir-Whorf: language shapes cognition and perception |
-| 22 | A | Right hemisphere: figurative, indirect, discourse-level language |
-| 23 | B | Left hemisphere: fine-grained, rapid semantic access |
-| 24 | B | ASL activates classical left-hemisphere language areas regardless of modality |
-| 25 | B | Angular gyrus damage → Gerstmann syndrome (reading, writing, math, finger ID deficits) |
-
----
-*Practice test generated from Language & Lateralization (15.1–15.2) curriculum.*
+| 1 | B | Language must be dynamic and arbitrary; honeybee dances are species-typical and non-arbitrary |
+| 2 | C | Different sounds map to the same meaning across languages — no inherent sound-meaning relationship |
+| 3 | C | Meaning of "sick" changed over time = dynamism |
+| 4 | B | Morphemes are the smallest units of meaning (prefixes, roots, suffixes) |
+| 5 | B | Syntax = structure/arrangement; Semantics = meaning |
+| 6 | B | Manual babbling without reinforcement suggests babbling is a biological developmental process (Chomsky side) |
+| 7 | B | Alex learned via training/reinforcement — consistent with Skinner's model |
+| 8 | B | Sarah applied apple's conceptual attributes to its symbol, showing the symbol had become semantically linked |
+| 9 | B | The dissociation between what Genie could vs. couldn't learn aligns with the critical period — pruning had eliminated key pathways |
+| 10 | A | Genie learned vocabulary after 13 = some learning is still possible, weakening the hard boundary argument |
+| 11 | B | FOXP2 mutation → developmental verbal dyspraxia; motor deficit specific to speech coordination |
+| 12 | B | Wada test = causal evidence via anesthetic injection, not just correlation |
+| 13 | B | Pre-linguistic infants already show left planum temporale asymmetry → indicates innate lateralization |
+| 14 | A | Right hemisphere processed visual input, selected object correctly, but cannot verbally report (language production = left hemisphere) |
+| 15 | B | Nielson et al. (2013) found no evidence for individual trait-based hemispheric dominance |
+| 16 | C | Effortful, non-fluent production + intact comprehension + insight = Broca's aphasia |
+| 17 | B | Fluent but meaningless speech + no insight = Wernicke's aphasia; left superior temporal lobe |
+| 18 | C | Broca's original patient: comprehension intact, production impaired → left inferior frontal gyrus |
+| 19 | B | Wernicke's aphasia includes word deafness (auditory) and word blindness (written) |
+| 20 | B | TMS disrupting a synonym judgment task (comprehension) shows Broca's area is involved beyond just production |
+| 21 | C | Arcuate fasciculus connects Broca's and Wernicke's; damage would disconnect comprehension from production |
+| 22 | B | fMRI showing adjacent region activation = compensatory plasticity |
+| 23 | C | Neurons distributed evenly across network = strict regional division is an oversimplification |
+| 24 | B | Same network activates for speech, text, and sign = modality-independent language processing |
+| 25 | C | Global aphasia = worst prognosis; very limited recovery compared to nonfluent aphasia alone |
+| 26 | B | Some plasticity exists in primates, but full language criteria (dynamic, arbitrary, grammatical) remain unmet |

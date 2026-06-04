@@ -642,9 +642,10 @@ class ChatDisplay(ctk.CTkFrame):
         self._stream_buf = ""
 
     def _redirect_text_scroll(self, event):
-        """Forward a MouseWheel/Button-4/5 event from a tk.Text widget onto the
-        scrollable frame's canvas, so the chat scrolls instead of the bubble's
-        internal text view."""
+        """Forward a MouseWheel/Button-4/5 event onto the scrollable frame's
+        canvas, so scrolling over a chat bubble scrolls the chat — not the
+        bubble's internal view. Returns "break" so default Text/Canvas
+        class bindings (which would scroll the bubble) never fire."""
         try:
             canvas = self._scroll_canvas
             num = getattr(event, "num", 0)
@@ -666,16 +667,16 @@ class ChatDisplay(ctk.CTkFrame):
                         canvas.yview_scroll(-1 if d > 0 else 1, "units")
         except Exception:
             pass
-        return "break"   # stop Text class binding from scrolling the bubble itself
+        return "break"   # stop default class bindings from running
 
     def _bind_scroll(self, widget):
-        """Bind scroll redirect on every tk.Text descendant so scrolling over a
-        chat bubble scrolls the whole chat — not just the bubble."""
+        """Bind scroll redirect on every descendant so scroll works anywhere
+        in the chat — frames, labels, text, image bubbles, etc. macOS Tk
+        does not propagate <MouseWheel> reliably, so we bind every widget."""
         try:
-            if isinstance(widget, tk.Text):
-                widget.bind("<MouseWheel>", self._redirect_text_scroll)
-                widget.bind("<Button-4>",   self._redirect_text_scroll)
-                widget.bind("<Button-5>",   self._redirect_text_scroll)
+            widget.bind("<MouseWheel>", self._redirect_text_scroll, add="+")
+            widget.bind("<Button-4>",   self._redirect_text_scroll, add="+")
+            widget.bind("<Button-5>",   self._redirect_text_scroll, add="+")
             for child in widget.winfo_children():
                 self._bind_scroll(child)
         except Exception:

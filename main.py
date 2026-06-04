@@ -963,6 +963,42 @@ class ChatDisplay(ctk.CTkFrame):
     def stream(self, chunk: str):
         if not self._streaming:
             self.start_hubert()
+        # ── Image directive parser ────────────────────────────────────────
+        # HUBERT can embed images by writing  [[show_image: SRC | caption]]
+        # We buffer text until the directive is complete, then render the
+        # image and skip the markup in the visible stream.
+        import re as _re
+        self._stream_buf += chunk
+        rendered_chunk = ""
+        while True:
+            m = _re.search(r"\[\[show_image\s*:\s*([^\]|]+?)(?:\s*\|\s*([^\]]*))?\]\]",
+                            self._stream_buf)
+            if m:
+                # Flush anything before the directive as visible text
+                rendered_chunk += self._stream_buf[: m.start()]
+                src = m.group(1).strip()
+                cap = (m.group(2) or "").strip()
+                # End the current HUBERT bubble so the image goes below it
+                # cleanly, then restart streaming after.
+                self.end_hubert()
+                self.show_image(src, caption=cap)
+                self._stream_buf = self._stream_buf[m.end():]
+                if self._stream_buf:
+                    self.start_hubert()
+                continue
+            # No full directive — hold back any partial "[[" tail
+            tail_idx = self._stream_buf.rfind("[[")
+            if tail_idx >= 0 and "]]" not in self._stream_buf[tail_idx:]:
+                rendered_chunk += self._stream_buf[:tail_idx]
+                self._stream_buf = self._stream_buf[tail_idx:]
+            else:
+                rendered_chunk += self._stream_buf
+                self._stream_buf = ""
+            break
+
+        if not rendered_chunk:
+            return
+        chunk = rendered_chunk
         self._stream_text += chunk
         t = self._stream_label
         if t:
@@ -986,6 +1022,17 @@ class ChatDisplay(ctk.CTkFrame):
         self._scroll_bottom()
 
     def end_hubert(self):
+        # Flush any unmatched partial "[[" that never resolved into a directive.
+        if getattr(self, "_stream_buf", ""):
+            t = self._stream_label
+            if t:
+                try:
+                    t.configure(state="normal")
+                    t.insert("end", self._stream_buf)
+                    t.configure(state="disabled")
+                except Exception:
+                    pass
+            self._stream_buf = ""
         # Final height fit on stream end
         t = self._stream_label
         if t:

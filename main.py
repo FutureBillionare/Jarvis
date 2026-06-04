@@ -631,77 +631,51 @@ class ChatDisplay(ctk.CTkFrame):
         self._typing = TypingIndicator(self._sf)
         # Working indicator — floats at bottom-left of the chat area (hidden until active)
         self._working = WorkingIndicator(self)
-        # Grab the inner canvas so we can forward scroll events to it
+        # CTkScrollableFrame already bind_all's <MouseWheel> to its own parent_canvas
+        # via _mouse_wheel_all, walking event.widget.master to find the canvas. That
+        # works for plain frames/labels but tk.Text widgets consume <MouseWheel> via
+        # their default Text class binding and never let it bubble. We need to
+        # redirect scroll events on Text widgets specifically.
         self._scroll_canvas = self._sf._parent_canvas
         self._stream_resize_id = None
-        # Bind scroll directly on the canvas + scroll frame so it works without bind_all
-        for w in (self._scroll_canvas, self._sf, self):
-            w.bind("<MouseWheel>",  self._on_scroll, add="+")
-            w.bind("<Button-4>",    self._on_scroll, add="+")
-            w.bind("<Button-5>",    self._on_scroll, add="+")
-        # Enter/Leave still drives bind_all as a safety net for child widgets we haven't bound yet
-        self.bind("<Enter>", self._grab_scroll)
-        self.bind("<Leave>", self._on_leave_scroll)
+        # Buffer for streaming image directives: hold back partial [[show_image:...]] markup
+        self._stream_buf = ""
 
-    def _grab_scroll(self, _event=None):
+    def _redirect_text_scroll(self, event):
+        """Forward a MouseWheel/Button-4/5 event from a tk.Text widget onto the
+        scrollable frame's canvas, so the chat scrolls instead of the bubble's
+        internal text view."""
         try:
-            self.bind_all("<MouseWheel>", self._on_scroll)
-            self.bind_all("<Button-4>",   self._on_scroll)
-            self.bind_all("<Button-5>",   self._on_scroll)
-        except Exception:
-            pass
-
-    def _on_scroll(self, event):
-        try:
-            # Normalize scroll delta across platforms.
-            #   Linux: Button-4 = up, Button-5 = down (no event.delta)
-            #   macOS: event.delta is a small int per trackpad tick (e.g. ±1 to ±10)
-            #   Windows: event.delta is a multiple of 120 per wheel notch
-            if getattr(event, "num", 0) in (4, 5):
-                step = -3 if event.num == 4 else 3
+            canvas = self._scroll_canvas
+            num = getattr(event, "num", 0)
+            if num in (4, 5):
+                canvas.yview_scroll(-3 if num == 4 else 3, "units")
             else:
                 d = getattr(event, "delta", 0) or 0
                 if _IS_MAC:
+                    # macOS Tk delivers small ints per trackpad tick.
                     step = -int(d)
                     if step == 0 and d:
                         step = -1 if d > 0 else 1
+                    canvas.yview_scroll(step, "units")
                 else:
+                    # Windows: 120 per wheel notch.
                     if abs(d) >= 120:
-                        step = int(-d / 120) * 3
+                        canvas.yview_scroll(int(-d / 120) * 3, "units")
                     elif d:
-                        step = -1 if d > 0 else 1
-                    else:
-                        step = 0
-            if step:
-                self._scroll_canvas.yview_scroll(step, "units")
+                        canvas.yview_scroll(-1 if d > 0 else 1, "units")
         except Exception:
             pass
-        return "break"
-
-    def _on_leave_scroll(self, event):
-        # Only release scroll grab if mouse truly left the ChatDisplay (not just a child)
-        try:
-            x, y = self.winfo_pointerxy()
-            w = self.winfo_containing(x, y)
-            while w:
-                if w is self:
-                    return
-                w = w.master
-        except Exception:
-            pass
-        for seq in ("<MouseWheel>", "<Button-4>", "<Button-5>"):
-            try:
-                self.unbind_all(seq)
-            except Exception:
-                pass
+        return "break"   # stop Text class binding from scrolling the bubble itself
 
     def _bind_scroll(self, widget):
-        """Recursively bind mousewheel on widget and all descendants.
-        Text widgets need explicit binding because they consume MouseWheel by default."""
+        """Bind scroll redirect on every tk.Text descendant so scrolling over a
+        chat bubble scrolls the whole chat — not just the bubble."""
         try:
-            widget.bind("<MouseWheel>", self._on_scroll, add="+")
-            widget.bind("<Button-4>",   self._on_scroll, add="+")
-            widget.bind("<Button-5>",   self._on_scroll, add="+")
+            if isinstance(widget, tk.Text):
+                widget.bind("<MouseWheel>", self._redirect_text_scroll)
+                widget.bind("<Button-4>",   self._redirect_text_scroll)
+                widget.bind("<Button-5>",   self._redirect_text_scroll)
             for child in widget.winfo_children():
                 self._bind_scroll(child)
         except Exception:
@@ -755,11 +729,24 @@ class ChatDisplay(ctk.CTkFrame):
     def set_working(self, active: bool):
         self._working.set_active(active)
 
-    def _scroll_bottom(self):
+    def _scroll_bottom(self, force: bool = False):
+        """Scroll to the bottom — but only if the user is already near the bottom,
+        so we never yank the view away while they're reading or scrolling up.
+        Pass force=True to override and always scroll (rarely needed)."""
         def _do():
             try:
+                canvas = self._sf._parent_canvas
+                if not force:
+                    # If the scrollbar is more than ~15% from the bottom, the user
+                    # has scrolled up to read — don't fight them.
+                    try:
+                        _top, bottom = canvas.yview()
+                        if bottom < 0.85:
+                            return
+                    except Exception:
+                        pass
                 self._sf.update_idletasks()
-                self._sf._parent_canvas.yview_moveto(1.0)
+                canvas.yview_moveto(1.0)
             except Exception:
                 pass
         self.after(40, _do)
@@ -780,7 +767,8 @@ class ChatDisplay(ctk.CTkFrame):
                                font=F_CHAT, padx=14, pady=9, justify="right")
         lbl.pack(fill="x")
         self._bind_scroll(outer)
-        self._scroll_bottom()
+        # Intentionally NO auto-scroll on user send — keeps the view stable
+        # so the user can stay where they were reading.
 
     # ── File card (attached / generated document) ──
     def file_card(self, name: str, path: str, info: str = "",

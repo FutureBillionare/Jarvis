@@ -1124,6 +1124,8 @@ class ChatDisplay(ctk.CTkFrame):
         self._streaming = False
         self._stream_label = None
         self._stream_text  = ""
+        self._stream_buf   = ""
+        self._photos.clear()
 
 
 # ── Working Indicator ─────────────────────────────────────────────────────────

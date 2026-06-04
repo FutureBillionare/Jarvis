@@ -1538,7 +1538,7 @@ class SphereWidget(tk.Canvas):
     """Orange JARVIS-style morphing blob. Idle: slow amber pulse.
     Speaking: faster morph + rings. Muted: frozen indigo. Click to toggle mute."""
 
-    H       = 160
+    H       = 110
     N_PTS   = 24
     BG_RGB  = (6, 8, 16)   # matches BG = "#060810"
 
@@ -3913,20 +3913,23 @@ class HubertApp(ctk.CTk):
         center = tk.Frame(self._paned, bg=BG)
         self._paned.add(center, minsize=360, stretch="always")
 
+        # Pack order: anchor input + voice to the BOTTOM and sphere to the TOP so
+        # the chat fills only the middle and never overflows / hides the input bar
+        # when the window is short.
         self.sphere = SphereWidget(center,
                                    on_mute_toggle=self._on_sphere_mute)
-        self.sphere.pack(fill="x", pady=(0, 0))
-
-        self.chat = ChatDisplay(center)
-        self.chat.pack(fill="both", expand=True, pady=(0, 4), padx=8)
-
-        self.voice_panel = VoicePanel(center, height=72)
-        self.voice_panel.pack(fill="x", padx=8, pady=(0, 4))
-        self.voice_panel.pack_propagate(False)
+        self.sphere.pack(side="top", fill="x", pady=(0, 0))
 
         self.input_bar = InputBar(center, on_send=self._send,
                                   on_camera=self._on_video)
-        self.input_bar.pack(fill="x", padx=8, pady=(0, 8))
+        self.input_bar.pack(side="bottom", fill="x", padx=8, pady=(0, 8))
+
+        self.voice_panel = VoicePanel(center, height=72)
+        self.voice_panel.pack(side="bottom", fill="x", padx=8, pady=(0, 4))
+        self.voice_panel.pack_propagate(False)
+
+        self.chat = ChatDisplay(center)
+        self.chat.pack(side="top", fill="both", expand=True, pady=(0, 4), padx=8)
         self._voice_listening = False
 
         def _on_mic_state(active: bool):

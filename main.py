@@ -631,15 +631,41 @@ class ChatDisplay(ctk.CTkFrame):
         self._typing = TypingIndicator(self._sf)
         # Working indicator — floats at bottom-left of the chat area (hidden until active)
         self._working = WorkingIndicator(self)
-        # CTkScrollableFrame already bind_all's <MouseWheel> to its own parent_canvas
-        # via _mouse_wheel_all, walking event.widget.master to find the canvas. That
-        # works for plain frames/labels but tk.Text widgets consume <MouseWheel> via
-        # their default Text class binding and never let it bubble. We need to
-        # redirect scroll events on Text widgets specifically.
+        # Bind scroll on the canvas, the scrollable frame, and ourselves.
+        # CTk's bind_all handler can be flaky on macOS, so we wire the
+        # forwarder directly to anything the trackpad might hit inside the
+        # chat area. Every child added later is also bound via _bind_scroll.
         self._scroll_canvas = self._sf._parent_canvas
         self._stream_resize_id = None
         # Buffer for streaming image directives: hold back partial [[show_image:...]] markup
         self._stream_buf = ""
+        for w in (self._scroll_canvas, self._sf, self):
+            try:
+                w.bind("<MouseWheel>", self._redirect_text_scroll, add="+")
+                w.bind("<Button-4>",   self._redirect_text_scroll, add="+")
+                w.bind("<Button-5>",   self._redirect_text_scroll, add="+")
+            except Exception:
+                pass
+        # While the cursor is over the chat, grab MouseWheel globally so trackpad
+        # scrolls the chat even when hovering over other floating elements
+        # (typing indicator, working indicator). Released on Leave.
+        self.bind("<Enter>", self._grab_global_scroll)
+        self.bind("<Leave>", self._release_global_scroll)
+
+    def _grab_global_scroll(self, _e=None):
+        try:
+            # add="+" — we APPEND, never replacing CTk's own bind_all
+            self.bind_all("<MouseWheel>", self._redirect_text_scroll, add="+")
+            self.bind_all("<Button-4>",   self._redirect_text_scroll, add="+")
+            self.bind_all("<Button-5>",   self._redirect_text_scroll, add="+")
+            self._grabbed_scroll = True
+        except Exception:
+            pass
+
+    def _release_global_scroll(self, _e=None):
+        # We can't selectively un-add an add="+" binding, but the handler is
+        # idempotent and safe — leaving it bound has no side effect.
+        pass
 
     def _redirect_text_scroll(self, event):
         """Forward a MouseWheel/Button-4/5 event onto the scrollable frame's
@@ -731,23 +757,15 @@ class ChatDisplay(ctk.CTkFrame):
         self._working.set_active(active)
 
     def _scroll_bottom(self, force: bool = False):
-        """Scroll to the bottom — but only if the user is already near the bottom,
-        so we never yank the view away while they're reading or scrolling up.
-        Pass force=True to override and always scroll (rarely needed)."""
+        """No-op. Auto-scroll is disabled by user request — Jake controls
+        scroll position with the trackpad. Pass force=True if you genuinely
+        need to scroll (e.g. an explicit "jump to bottom" button)."""
+        if not force:
+            return
         def _do():
             try:
-                canvas = self._sf._parent_canvas
-                if not force:
-                    # If the scrollbar is more than ~15% from the bottom, the user
-                    # has scrolled up to read — don't fight them.
-                    try:
-                        _top, bottom = canvas.yview()
-                        if bottom < 0.85:
-                            return
-                    except Exception:
-                        pass
                 self._sf.update_idletasks()
-                canvas.yview_moveto(1.0)
+                self._sf._parent_canvas.yview_moveto(1.0)
             except Exception:
                 pass
         self.after(40, _do)

@@ -847,6 +847,88 @@ class ChatDisplay(ctk.CTkFrame):
         self._bind_scroll(outer)
         self._scroll_bottom()
 
+    # ── Image bubble ──
+    def show_image(self, src: str, caption: str = "", max_w: int = 520):
+        """Display an image (local path or http(s) URL) inside the chat.
+
+        Used by HUBERT when it wants to show a picture it found or generated.
+        Image is downloaded if a URL is given, resized to fit chat width, and
+        rendered in a HUBERT-style bubble with an optional caption.
+        """
+        self._hide_typing()
+        # ── Resolve src → local file path
+        local_path = src
+        try:
+            if isinstance(src, str) and src.lower().startswith(("http://", "https://")):
+                import tempfile, urllib.request, mimetypes
+                req = urllib.request.Request(
+                    src, headers={"User-Agent": "Mozilla/5.0 (HUBERT)"})
+                with urllib.request.urlopen(req, timeout=15) as r:
+                    data = r.read()
+                    ctype = r.headers.get("Content-Type", "")
+                ext = mimetypes.guess_extension(ctype.split(";")[0]) or ".jpg"
+                fd, local_path = tempfile.mkstemp(suffix=ext, prefix="hubert_img_")
+                with os.fdopen(fd, "wb") as f:
+                    f.write(data)
+        except Exception as e:
+            self.error(f"Could not load image: {e}")
+            return
+
+        # ── Decode + resize
+        try:
+            from PIL import Image, ImageTk
+            img = Image.open(local_path)
+            img.load()
+            # Keep aspect ratio, fit width into max_w
+            w, h = img.size
+            if w > max_w:
+                ratio = max_w / float(w)
+                img = img.resize((max_w, int(h * ratio)), Image.LANCZOS)
+            photo = ImageTk.PhotoImage(img)
+            self._photos.append(photo)   # keep alive (PhotoImage is GC-sensitive)
+        except Exception as e:
+            self.error(f"Could not display image: {e}")
+            return
+
+        # ── Render bubble
+        outer = tk.Frame(self._sf, bg=BG_PANEL)
+        outer.pack(fill="x", pady=(10, 2), padx=14)
+        tk.Label(outer, text=f"HUBERT  {ts()}",
+                 font=F_TAG, fg=ACCENT, bg=BG_PANEL,
+                 anchor="w").pack(anchor="w", padx=6)
+        row = tk.Frame(outer, bg=BG_PANEL)
+        row.pack(fill="x")
+        tk.Frame(row, bg=ACCENT, width=2).pack(side="left", fill="y", padx=(4, 0))
+        bubble = tk.Frame(row, bg=HUB_BG)
+        bubble.pack(side="left", fill="x", expand=True, padx=(6, 4), pady=2)
+
+        img_lbl = tk.Label(bubble, image=photo, bg=HUB_BG, bd=0)
+        img_lbl.image = photo
+        img_lbl.pack(anchor="w", padx=8, pady=(8, 4 if caption else 8))
+
+        # Click to open in OS viewer
+        def _open(_e=None, p=local_path):
+            import subprocess, platform as _plat
+            if _plat.system() == "Darwin":
+                subprocess.run(["open", p], check=False)
+            elif _plat.system() == "Windows":
+                try:
+                    os.startfile(p)
+                except Exception:
+                    pass
+            else:
+                subprocess.run(["xdg-open", p], check=False)
+        img_lbl.configure(cursor="hand2")
+        img_lbl.bind("<Button-1>", _open)
+
+        if caption:
+            cap = self._selectable(bubble, caption, fg=TEXT, bg=HUB_BG,
+                                   font=F_CHAT, padx=12, pady=(2, 9))
+            cap.pack(anchor="w", fill="x")
+
+        self._bind_scroll(outer)
+        self._scroll_bottom()
+
     # ── HUBERT bubble ──
     def start_hubert(self):
         self._hide_typing()
@@ -4234,6 +4316,11 @@ class HubertApp(ctk.CTk):
                     self.sphere.set_speaking(cmd.get("active", False))
                 elif c == "sphere_muted":
                     self.sphere.set_muted(cmd.get("active", False))
+                elif c == "chat_show_image":
+                    self.chat.show_image(
+                        cmd.get("src", ""),
+                        caption=cmd.get("caption", ""),
+                    )
                 else:
                     self.swarm_panel.dispatch(cmd)
         except Exception:

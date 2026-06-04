@@ -634,15 +634,49 @@ class ChatDisplay(ctk.CTkFrame):
         # Grab the inner canvas so we can forward scroll events to it
         self._scroll_canvas = self._sf._parent_canvas
         self._stream_resize_id = None
-        # Bind Enter/Leave on the ChatDisplay frame to capture all scroll while hovering
-        self.bind("<Enter>", lambda e: self.bind_all("<MouseWheel>", self._on_scroll))
+        # Bind scroll directly on the canvas + scroll frame so it works without bind_all
+        for w in (self._scroll_canvas, self._sf, self):
+            w.bind("<MouseWheel>",  self._on_scroll, add="+")
+            w.bind("<Button-4>",    self._on_scroll, add="+")
+            w.bind("<Button-5>",    self._on_scroll, add="+")
+        # Enter/Leave still drives bind_all as a safety net for child widgets we haven't bound yet
+        self.bind("<Enter>", self._grab_scroll)
         self.bind("<Leave>", self._on_leave_scroll)
+
+    def _grab_scroll(self, _event=None):
+        try:
+            self.bind_all("<MouseWheel>", self._on_scroll)
+            self.bind_all("<Button-4>",   self._on_scroll)
+            self.bind_all("<Button-5>",   self._on_scroll)
+        except Exception:
+            pass
 
     def _on_scroll(self, event):
         try:
-            self._scroll_canvas.yview_scroll(int(-1 * event.delta), "units")
+            # Normalize scroll delta across platforms.
+            #   Linux: Button-4 = up, Button-5 = down (no event.delta)
+            #   macOS: event.delta is a small int per trackpad tick (e.g. ±1 to ±10)
+            #   Windows: event.delta is a multiple of 120 per wheel notch
+            if getattr(event, "num", 0) in (4, 5):
+                step = -3 if event.num == 4 else 3
+            else:
+                d = getattr(event, "delta", 0) or 0
+                if _IS_MAC:
+                    step = -int(d)
+                    if step == 0 and d:
+                        step = -1 if d > 0 else 1
+                else:
+                    if abs(d) >= 120:
+                        step = int(-d / 120) * 3
+                    elif d:
+                        step = -1 if d > 0 else 1
+                    else:
+                        step = 0
+            if step:
+                self._scroll_canvas.yview_scroll(step, "units")
         except Exception:
             pass
+        return "break"
 
     def _on_leave_scroll(self, event):
         # Only release scroll grab if mouse truly left the ChatDisplay (not just a child)
@@ -655,12 +689,19 @@ class ChatDisplay(ctk.CTkFrame):
                 w = w.master
         except Exception:
             pass
-        self.unbind_all("<MouseWheel>")
+        for seq in ("<MouseWheel>", "<Button-4>", "<Button-5>"):
+            try:
+                self.unbind_all(seq)
+            except Exception:
+                pass
 
     def _bind_scroll(self, widget):
-        """Recursively bind mousewheel on widget and all descendants."""
+        """Recursively bind mousewheel on widget and all descendants.
+        Text widgets need explicit binding because they consume MouseWheel by default."""
         try:
-            widget.bind("<MouseWheel>", self._on_scroll)
+            widget.bind("<MouseWheel>", self._on_scroll, add="+")
+            widget.bind("<Button-4>",   self._on_scroll, add="+")
+            widget.bind("<Button-5>",   self._on_scroll, add="+")
             for child in widget.winfo_children():
                 self._bind_scroll(child)
         except Exception:

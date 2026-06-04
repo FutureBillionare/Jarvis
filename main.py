@@ -859,18 +859,23 @@ class ChatDisplay(ctk.CTkFrame):
         """Display an image (local path or http(s) URL) inside the chat.
 
         Used by HUBERT when it wants to show a picture it found or generated.
-        Image is downloaded if a URL is given, resized to fit chat width, and
-        rendered in a HUBERT-style bubble with an optional caption.
+        URL fetches happen on a background thread so the UI never blocks; the
+        actual render is dispatched back to the Tk main thread.
         """
         self._hide_typing()
-        # ── Resolve src → local file path
-        local_path = src
-        try:
-            if isinstance(src, str) and src.lower().startswith(("http://", "https://")):
-                import tempfile, urllib.request, urllib.parse, mimetypes
+        if not isinstance(src, str) or not src.strip():
+            self.error("show_image: empty src")
+            return
+        # Local file — render immediately on the UI thread.
+        if not src.lower().startswith(("http://", "https://")):
+            self._render_image(src, caption, max_w)
+            return
+        # URL — fetch on a worker thread, then bounce back to UI thread.
+        def _fetch():
+            import tempfile, urllib.request, urllib.error, urllib.parse, mimetypes
+            try:
                 parsed = urllib.parse.urlparse(src)
                 referer = f"{parsed.scheme}://{parsed.netloc}/"
-                # Browser-like headers — many CDNs 403 on minimal UAs.
                 req = urllib.request.Request(src, headers={
                     "User-Agent": ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
                                     "AppleWebKit/537.36 (KHTML, like Gecko) "
@@ -879,50 +884,55 @@ class ChatDisplay(ctk.CTkFrame):
                     "Accept-Language": "en-US,en;q=0.9",
                     "Referer": referer,
                 })
-                try:
-                    with urllib.request.urlopen(req, timeout=20) as r:
-                        data = r.read()
-                        ctype = r.headers.get("Content-Type", "")
-                except urllib.error.HTTPError as he:
-                    self.error(f"Image fetch HTTP {he.code}: {src}")
-                    return
-                except urllib.error.URLError as ue:
-                    self.error(f"Image fetch failed: {ue.reason} — {src}")
-                    return
-                if not data:
-                    self.error(f"Image fetch returned empty body: {src}")
-                    return
-                # Guard against HTML error pages returned with 200 OK
-                if ctype and ctype.split(";")[0].strip().lower() in (
-                    "text/html", "text/plain", "application/json",
-                ):
-                    self.error(f"URL did not return an image ({ctype}): {src}")
-                    return
-                ext = mimetypes.guess_extension(ctype.split(";")[0]) or ".jpg"
+                with urllib.request.urlopen(req, timeout=20) as r:
+                    data = r.read()
+                    ctype = r.headers.get("Content-Type", "")
+            except urllib.error.HTTPError as he:
+                self.after(0, lambda: self.error(f"Image HTTP {he.code}: {src}"))
+                return
+            except urllib.error.URLError as ue:
+                self.after(0, lambda: self.error(f"Image fetch failed: {ue.reason}"))
+                return
+            except Exception as e:
+                self.after(0, lambda: self.error(f"Image fetch error: {e}"))
+                return
+            if not data:
+                self.after(0, lambda: self.error(f"Empty body: {src}"))
+                return
+            ct = (ctype or "").split(";")[0].strip().lower()
+            if ct in ("text/html", "text/plain", "application/json"):
+                self.after(0, lambda: self.error(f"Not an image ({ct}): {src}"))
+                return
+            ext = mimetypes.guess_extension(ct) or ".jpg"
+            try:
                 fd, local_path = tempfile.mkstemp(suffix=ext, prefix="hubert_img_")
                 with os.fdopen(fd, "wb") as f:
                     f.write(data)
-        except Exception as e:
-            self.error(f"Could not load image: {e}")
-            return
+            except Exception as e:
+                self.after(0, lambda: self.error(f"Image save error: {e}"))
+                return
+            self.after(0, lambda: self._render_image(local_path, caption, max_w))
 
-        # ── Decode + resize
+        threading.Thread(target=_fetch, daemon=True,
+                         name="hubert-image-fetch").start()
+
+    def _render_image(self, local_path: str, caption: str, max_w: int):
+        """UI-thread image render. Called either directly (local path) or as
+        a callback after a background URL fetch."""
         try:
             from PIL import Image, ImageTk
             img = Image.open(local_path)
             img.load()
-            # Keep aspect ratio, fit width into max_w
             w, h = img.size
             if w > max_w:
                 ratio = max_w / float(w)
                 img = img.resize((max_w, int(h * ratio)), Image.LANCZOS)
             photo = ImageTk.PhotoImage(img)
-            self._photos.append(photo)   # keep alive (PhotoImage is GC-sensitive)
+            self._photos.append(photo)
         except Exception as e:
             self.error(f"Could not display image: {e}")
             return
 
-        # ── Render bubble
         outer = tk.Frame(self._sf, bg=BG_PANEL)
         outer.pack(fill="x", pady=(10, 2), padx=14)
         tk.Label(outer, text=f"HUBERT  {ts()}",
@@ -938,7 +948,6 @@ class ChatDisplay(ctk.CTkFrame):
         img_lbl.image = photo
         img_lbl.pack(anchor="w", padx=8, pady=(8, 4 if caption else 8))
 
-        # Click to open in OS viewer
         def _open(_e=None, p=local_path):
             import subprocess, platform as _plat
             if _plat.system() == "Darwin":
@@ -959,7 +968,6 @@ class ChatDisplay(ctk.CTkFrame):
             cap.pack(anchor="w", fill="x")
 
         self._bind_scroll(outer)
-        self._scroll_bottom()
 
     # ── HUBERT bubble ──
     def start_hubert(self):

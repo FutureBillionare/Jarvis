@@ -23,7 +23,7 @@ TOOL_GROUPS: dict[str, list[str]] = {
     "core": [
         "run_command", "take_screenshot", "read_file", "write_file",
         "list_files", "get_system_info", "ollama_route", "ollama_swarm",
-        "token_stats", "write_new_tool", "list_tools",
+        "token_stats", "write_new_tool", "list_tools", "show_image",
     ],
     "computer": [
         "open_application", "click_at", "move_mouse", "type_text",

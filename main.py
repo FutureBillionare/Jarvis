@@ -867,12 +867,37 @@ class ChatDisplay(ctk.CTkFrame):
         local_path = src
         try:
             if isinstance(src, str) and src.lower().startswith(("http://", "https://")):
-                import tempfile, urllib.request, mimetypes
-                req = urllib.request.Request(
-                    src, headers={"User-Agent": "Mozilla/5.0 (HUBERT)"})
-                with urllib.request.urlopen(req, timeout=15) as r:
-                    data = r.read()
-                    ctype = r.headers.get("Content-Type", "")
+                import tempfile, urllib.request, urllib.parse, mimetypes
+                parsed = urllib.parse.urlparse(src)
+                referer = f"{parsed.scheme}://{parsed.netloc}/"
+                # Browser-like headers — many CDNs 403 on minimal UAs.
+                req = urllib.request.Request(src, headers={
+                    "User-Agent": ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                                    "AppleWebKit/537.36 (KHTML, like Gecko) "
+                                    "Chrome/124.0.0.0 Safari/537.36"),
+                    "Accept": ("image/avif,image/webp,image/apng,image/*,*/*;q=0.8"),
+                    "Accept-Language": "en-US,en;q=0.9",
+                    "Referer": referer,
+                })
+                try:
+                    with urllib.request.urlopen(req, timeout=20) as r:
+                        data = r.read()
+                        ctype = r.headers.get("Content-Type", "")
+                except urllib.error.HTTPError as he:
+                    self.error(f"Image fetch HTTP {he.code}: {src}")
+                    return
+                except urllib.error.URLError as ue:
+                    self.error(f"Image fetch failed: {ue.reason} — {src}")
+                    return
+                if not data:
+                    self.error(f"Image fetch returned empty body: {src}")
+                    return
+                # Guard against HTML error pages returned with 200 OK
+                if ctype and ctype.split(";")[0].strip().lower() in (
+                    "text/html", "text/plain", "application/json",
+                ):
+                    self.error(f"URL did not return an image ({ctype}): {src}")
+                    return
                 ext = mimetypes.guess_extension(ctype.split(";")[0]) or ".jpg"
                 fd, local_path = tempfile.mkstemp(suffix=ext, prefix="hubert_img_")
                 with os.fdopen(fd, "wb") as f:

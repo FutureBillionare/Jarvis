@@ -59,13 +59,31 @@ _EXTRA_FLAGS = [
 ]
 
 
+_HUBERT_UI_INSTRUCTIONS = (
+    "[HUBERT UI INSTRUCTIONS]\n"
+    "You are running inside the HUBERT desktop chat. The user is Jake "
+    "(hubert.the.bot@gmail.com).\n\n"
+    "Inline images: when an image would help explain something, or you "
+    "find a useful picture on the web, embed it inline by writing on its "
+    "own line:\n"
+    "  [[show_image: SRC | optional caption]]\n"
+    "where SRC is an http(s) URL or an absolute local file path. The "
+    "HUBERT UI parses this directive, downloads the image if needed, "
+    "and renders it as a chat bubble. The directive itself never appears "
+    "in the chat — write any explanatory text on the lines around it.\n"
+    "Use this liberally for diagrams, charts, screenshots, reference "
+    "photos, or anything visual that aids the answer.\n"
+    "[END UI INSTRUCTIONS]"
+)
+
+
 def _build_prompt(message: str, history: list[dict] | None,
                   last_session: str | None) -> str:
     """
     Prepend conversation history (and optional last-session recap) to the message
     so claude -p has full context despite being stateless.
     """
-    parts = []
+    parts = [_HUBERT_UI_INSTRUCTIONS]
 
     if last_session:
         parts.append(

@@ -631,36 +631,78 @@ class ChatDisplay(ctk.CTkFrame):
         self._typing = TypingIndicator(self._sf)
         # Working indicator — floats at bottom-left of the chat area (hidden until active)
         self._working = WorkingIndicator(self)
-        # Grab the inner canvas so we can forward scroll events to it
+        # Bind scroll on the canvas, the scrollable frame, and ourselves.
+        # CTk's bind_all handler can be flaky on macOS, so we wire the
+        # forwarder directly to anything the trackpad might hit inside the
+        # chat area. Every child added later is also bound via _bind_scroll.
         self._scroll_canvas = self._sf._parent_canvas
         self._stream_resize_id = None
-        # Bind Enter/Leave on the ChatDisplay frame to capture all scroll while hovering
-        self.bind("<Enter>", lambda e: self.bind_all("<MouseWheel>", self._on_scroll))
-        self.bind("<Leave>", self._on_leave_scroll)
+        # Buffer for streaming image directives: hold back partial [[show_image:...]] markup
+        self._stream_buf = ""
+        for w in (self._scroll_canvas, self._sf, self):
+            try:
+                w.bind("<MouseWheel>", self._redirect_text_scroll, add="+")
+                w.bind("<Button-4>",   self._redirect_text_scroll, add="+")
+                w.bind("<Button-5>",   self._redirect_text_scroll, add="+")
+            except Exception:
+                pass
+        # While the cursor is over the chat, grab MouseWheel globally so trackpad
+        # scrolls the chat even when hovering over other floating elements
+        # (typing indicator, working indicator). Released on Leave.
+        self.bind("<Enter>", self._grab_global_scroll)
+        self.bind("<Leave>", self._release_global_scroll)
 
-    def _on_scroll(self, event):
+    def _grab_global_scroll(self, _e=None):
         try:
-            self._scroll_canvas.yview_scroll(int(-1 * event.delta), "units")
+            # add="+" — we APPEND, never replacing CTk's own bind_all
+            self.bind_all("<MouseWheel>", self._redirect_text_scroll, add="+")
+            self.bind_all("<Button-4>",   self._redirect_text_scroll, add="+")
+            self.bind_all("<Button-5>",   self._redirect_text_scroll, add="+")
+            self._grabbed_scroll = True
         except Exception:
             pass
 
-    def _on_leave_scroll(self, event):
-        # Only release scroll grab if mouse truly left the ChatDisplay (not just a child)
+    def _release_global_scroll(self, _e=None):
+        # We can't selectively un-add an add="+" binding, but the handler is
+        # idempotent and safe — leaving it bound has no side effect.
+        pass
+
+    def _redirect_text_scroll(self, event):
+        """Forward a MouseWheel/Button-4/5 event onto the scrollable frame's
+        canvas, so scrolling over a chat bubble scrolls the chat — not the
+        bubble's internal view. Returns "break" so default Text/Canvas
+        class bindings (which would scroll the bubble) never fire."""
         try:
-            x, y = self.winfo_pointerxy()
-            w = self.winfo_containing(x, y)
-            while w:
-                if w is self:
-                    return
-                w = w.master
+            canvas = self._scroll_canvas
+            num = getattr(event, "num", 0)
+            if num in (4, 5):
+                canvas.yview_scroll(-3 if num == 4 else 3, "units")
+            else:
+                d = getattr(event, "delta", 0) or 0
+                if _IS_MAC:
+                    # macOS Tk delivers small ints per trackpad tick.
+                    step = -int(d)
+                    if step == 0 and d:
+                        step = -1 if d > 0 else 1
+                    canvas.yview_scroll(step, "units")
+                else:
+                    # Windows: 120 per wheel notch.
+                    if abs(d) >= 120:
+                        canvas.yview_scroll(int(-d / 120) * 3, "units")
+                    elif d:
+                        canvas.yview_scroll(-1 if d > 0 else 1, "units")
         except Exception:
             pass
-        self.unbind_all("<MouseWheel>")
+        return "break"   # stop default class bindings from running
 
     def _bind_scroll(self, widget):
-        """Recursively bind mousewheel on widget and all descendants."""
+        """Bind scroll redirect on every descendant so scroll works anywhere
+        in the chat — frames, labels, text, image bubbles, etc. macOS Tk
+        does not propagate <MouseWheel> reliably, so we bind every widget."""
         try:
-            widget.bind("<MouseWheel>", self._on_scroll)
+            widget.bind("<MouseWheel>", self._redirect_text_scroll, add="+")
+            widget.bind("<Button-4>",   self._redirect_text_scroll, add="+")
+            widget.bind("<Button-5>",   self._redirect_text_scroll, add="+")
             for child in widget.winfo_children():
                 self._bind_scroll(child)
         except Exception:
@@ -714,7 +756,12 @@ class ChatDisplay(ctk.CTkFrame):
     def set_working(self, active: bool):
         self._working.set_active(active)
 
-    def _scroll_bottom(self):
+    def _scroll_bottom(self, force: bool = False):
+        """No-op. Auto-scroll is disabled by user request — Jake controls
+        scroll position with the trackpad. Pass force=True if you genuinely
+        need to scroll (e.g. an explicit "jump to bottom" button)."""
+        if not force:
+            return
         def _do():
             try:
                 self._sf.update_idletasks()
@@ -739,7 +786,8 @@ class ChatDisplay(ctk.CTkFrame):
                                font=F_CHAT, padx=14, pady=9, justify="right")
         lbl.pack(fill="x")
         self._bind_scroll(outer)
-        self._scroll_bottom()
+        # Intentionally NO auto-scroll on user send — keeps the view stable
+        # so the user can stay where they were reading.
 
     # ── File card (attached / generated document) ──
     def file_card(self, name: str, path: str, info: str = "",
@@ -806,6 +854,121 @@ class ChatDisplay(ctk.CTkFrame):
         self._bind_scroll(outer)
         self._scroll_bottom()
 
+    # ── Image bubble ──
+    def show_image(self, src: str, caption: str = "", max_w: int = 520):
+        """Display an image (local path or http(s) URL) inside the chat.
+
+        Used by HUBERT when it wants to show a picture it found or generated.
+        URL fetches happen on a background thread so the UI never blocks; the
+        actual render is dispatched back to the Tk main thread.
+        """
+        self._hide_typing()
+        if not isinstance(src, str) or not src.strip():
+            self.error("show_image: empty src")
+            return
+        # Local file — render immediately on the UI thread.
+        if not src.lower().startswith(("http://", "https://")):
+            self._render_image(src, caption, max_w)
+            return
+        # URL — fetch on a worker thread, then bounce back to UI thread.
+        def _fetch():
+            import tempfile, urllib.request, urllib.error, urllib.parse, mimetypes
+            try:
+                parsed = urllib.parse.urlparse(src)
+                referer = f"{parsed.scheme}://{parsed.netloc}/"
+                req = urllib.request.Request(src, headers={
+                    "User-Agent": ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                                    "AppleWebKit/537.36 (KHTML, like Gecko) "
+                                    "Chrome/124.0.0.0 Safari/537.36"),
+                    "Accept": ("image/avif,image/webp,image/apng,image/*,*/*;q=0.8"),
+                    "Accept-Language": "en-US,en;q=0.9",
+                    "Referer": referer,
+                })
+                with urllib.request.urlopen(req, timeout=20) as r:
+                    data = r.read()
+                    ctype = r.headers.get("Content-Type", "")
+            except urllib.error.HTTPError as he:
+                self.after(0, lambda: self.error(f"Image HTTP {he.code}: {src}"))
+                return
+            except urllib.error.URLError as ue:
+                self.after(0, lambda: self.error(f"Image fetch failed: {ue.reason}"))
+                return
+            except Exception as e:
+                self.after(0, lambda: self.error(f"Image fetch error: {e}"))
+                return
+            if not data:
+                self.after(0, lambda: self.error(f"Empty body: {src}"))
+                return
+            ct = (ctype or "").split(";")[0].strip().lower()
+            if ct in ("text/html", "text/plain", "application/json"):
+                self.after(0, lambda: self.error(f"Not an image ({ct}): {src}"))
+                return
+            ext = mimetypes.guess_extension(ct) or ".jpg"
+            try:
+                fd, local_path = tempfile.mkstemp(suffix=ext, prefix="hubert_img_")
+                with os.fdopen(fd, "wb") as f:
+                    f.write(data)
+            except Exception as e:
+                self.after(0, lambda: self.error(f"Image save error: {e}"))
+                return
+            self.after(0, lambda: self._render_image(local_path, caption, max_w))
+
+        threading.Thread(target=_fetch, daemon=True,
+                         name="hubert-image-fetch").start()
+
+    def _render_image(self, local_path: str, caption: str, max_w: int):
+        """UI-thread image render. Called either directly (local path) or as
+        a callback after a background URL fetch."""
+        try:
+            from PIL import Image, ImageTk
+            img = Image.open(local_path)
+            img.load()
+            w, h = img.size
+            if w > max_w:
+                ratio = max_w / float(w)
+                img = img.resize((max_w, int(h * ratio)), Image.LANCZOS)
+            photo = ImageTk.PhotoImage(img)
+            self._photos.append(photo)
+        except Exception as e:
+            self.error(f"Could not display image: {e}")
+            return
+
+        outer = tk.Frame(self._sf, bg=BG_PANEL)
+        outer.pack(fill="x", pady=(10, 2), padx=14)
+        tk.Label(outer, text=f"HUBERT  {ts()}",
+                 font=F_TAG, fg=ACCENT, bg=BG_PANEL,
+                 anchor="w").pack(anchor="w", padx=6)
+        row = tk.Frame(outer, bg=BG_PANEL)
+        row.pack(fill="x")
+        tk.Frame(row, bg=ACCENT, width=2).pack(side="left", fill="y", padx=(4, 0))
+        bubble = tk.Frame(row, bg=HUB_BG)
+        bubble.pack(side="left", fill="x", expand=True, padx=(6, 4), pady=2)
+
+        img_lbl = tk.Label(bubble, image=photo, bg=HUB_BG, bd=0)
+        img_lbl.image = photo
+        img_lbl.pack(anchor="w", padx=8, pady=(8, 4 if caption else 8))
+
+        def _open(_e=None, p=local_path):
+            import subprocess, platform as _plat
+            if _plat.system() == "Darwin":
+                subprocess.run(["open", p], check=False)
+            elif _plat.system() == "Windows":
+                try:
+                    os.startfile(p)
+                except Exception:
+                    pass
+            else:
+                subprocess.run(["xdg-open", p], check=False)
+        img_lbl.configure(cursor="hand2")
+        img_lbl.bind("<Button-1>", _open)
+
+        if caption:
+            cap = self._selectable(bubble, caption, fg=TEXT, bg=HUB_BG,
+                                   font=F_CHAT, padx=12, pady=(2, 9))
+            cap.pack(anchor="w", fill="x")
+
+        self._bind_scroll(outer)
+
     # ── HUBERT bubble ──
     def start_hubert(self):
         self._hide_typing()
@@ -852,6 +1015,42 @@ class ChatDisplay(ctk.CTkFrame):
     def stream(self, chunk: str):
         if not self._streaming:
             self.start_hubert()
+        # ── Image directive parser ────────────────────────────────────────
+        # HUBERT can embed images by writing  [[show_image: SRC | caption]]
+        # We buffer text until the directive is complete, then render the
+        # image and skip the markup in the visible stream.
+        import re as _re
+        self._stream_buf += chunk
+        rendered_chunk = ""
+        while True:
+            m = _re.search(r"\[\[show_image\s*:\s*([^\]|]+?)(?:\s*\|\s*([^\]]*))?\]\]",
+                            self._stream_buf)
+            if m:
+                # Flush anything before the directive as visible text
+                rendered_chunk += self._stream_buf[: m.start()]
+                src = m.group(1).strip()
+                cap = (m.group(2) or "").strip()
+                # End the current HUBERT bubble so the image goes below it
+                # cleanly, then restart streaming after.
+                self.end_hubert()
+                self.show_image(src, caption=cap)
+                self._stream_buf = self._stream_buf[m.end():]
+                if self._stream_buf:
+                    self.start_hubert()
+                continue
+            # No full directive — hold back any partial "[[" tail
+            tail_idx = self._stream_buf.rfind("[[")
+            if tail_idx >= 0 and "]]" not in self._stream_buf[tail_idx:]:
+                rendered_chunk += self._stream_buf[:tail_idx]
+                self._stream_buf = self._stream_buf[tail_idx:]
+            else:
+                rendered_chunk += self._stream_buf
+                self._stream_buf = ""
+            break
+
+        if not rendered_chunk:
+            return
+        chunk = rendered_chunk
         self._stream_text += chunk
         t = self._stream_label
         if t:
@@ -875,6 +1074,17 @@ class ChatDisplay(ctk.CTkFrame):
         self._scroll_bottom()
 
     def end_hubert(self):
+        # Flush any unmatched partial "[[" that never resolved into a directive.
+        if getattr(self, "_stream_buf", ""):
+            t = self._stream_label
+            if t:
+                try:
+                    t.configure(state="normal")
+                    t.insert("end", self._stream_buf)
+                    t.configure(state="disabled")
+                except Exception:
+                    pass
+            self._stream_buf = ""
         # Final height fit on stream end
         t = self._stream_label
         if t:
@@ -966,6 +1176,8 @@ class ChatDisplay(ctk.CTkFrame):
         self._streaming = False
         self._stream_label = None
         self._stream_text  = ""
+        self._stream_buf   = ""
+        self._photos.clear()
 
 
 # ── Working Indicator ─────────────────────────────────────────────────────────
@@ -1497,7 +1709,7 @@ class SphereWidget(tk.Canvas):
     """Orange JARVIS-style morphing blob. Idle: slow amber pulse.
     Speaking: faster morph + rings. Muted: frozen indigo. Click to toggle mute."""
 
-    H       = 160
+    H       = 110
     N_PTS   = 24
     BG_RGB  = (6, 8, 16)   # matches BG = "#060810"
 
@@ -3872,20 +4084,23 @@ class HubertApp(ctk.CTk):
         center = tk.Frame(self._paned, bg=BG)
         self._paned.add(center, minsize=360, stretch="always")
 
+        # Pack order: anchor input + voice to the BOTTOM and sphere to the TOP so
+        # the chat fills only the middle and never overflows / hides the input bar
+        # when the window is short.
         self.sphere = SphereWidget(center,
                                    on_mute_toggle=self._on_sphere_mute)
-        self.sphere.pack(fill="x", pady=(0, 0))
-
-        self.chat = ChatDisplay(center)
-        self.chat.pack(fill="both", expand=True, pady=(0, 4), padx=8)
-
-        self.voice_panel = VoicePanel(center, height=72)
-        self.voice_panel.pack(fill="x", padx=8, pady=(0, 4))
-        self.voice_panel.pack_propagate(False)
+        self.sphere.pack(side="top", fill="x", pady=(0, 0))
 
         self.input_bar = InputBar(center, on_send=self._send,
                                   on_camera=self._on_video)
-        self.input_bar.pack(fill="x", padx=8, pady=(0, 8))
+        self.input_bar.pack(side="bottom", fill="x", padx=8, pady=(0, 8))
+
+        self.voice_panel = VoicePanel(center, height=72)
+        self.voice_panel.pack(side="bottom", fill="x", padx=8, pady=(0, 4))
+        self.voice_panel.pack_propagate(False)
+
+        self.chat = ChatDisplay(center)
+        self.chat.pack(side="top", fill="both", expand=True, pady=(0, 4), padx=8)
         self._voice_listening = False
 
         def _on_mic_state(active: bool):
@@ -4190,6 +4405,11 @@ class HubertApp(ctk.CTk):
                     self.sphere.set_speaking(cmd.get("active", False))
                 elif c == "sphere_muted":
                     self.sphere.set_muted(cmd.get("active", False))
+                elif c == "chat_show_image":
+                    self.chat.show_image(
+                        cmd.get("src", ""),
+                        caption=cmd.get("caption", ""),
+                    )
                 else:
                     self.swarm_panel.dispatch(cmd)
         except Exception:
